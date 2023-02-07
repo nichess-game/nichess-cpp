@@ -929,8 +929,24 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
 
     auto legalMoves = pieceTypeToSquareIndexToLegalMoves[currentPiece->type][currentPiece->squareIndex];
     for(int j = 0; j < legalMoves.size(); j++) {
-      if(board[legalMoves[j].moveDstIdx]->type != NO_PIECE) continue;
-      makeMove(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx);
+      PlayerMove currentMove = legalMoves[j];
+      // Is p1 pawn trying to jump over another piece?
+      if(currentPiece->type == P1_PAWN &&
+          currentPiece->squareIndex - currentMove.moveDstIdx == -2 * NUM_COLUMNS 
+          ) {
+        // checks whether square in front of the p1 pawn is empty
+        if(board[currentPiece->squareIndex + NUM_COLUMNS]->type != NO_PIECE) continue;
+      }
+      // Is p2 pawn trying to jump over another piece?
+      if(currentPiece->type == P2_PAWN &&
+          currentPiece->squareIndex - currentMove.moveDstIdx == 2 * NUM_COLUMNS 
+          ) {
+        // checks whether square in front of the p2 pawn is empty
+        if(board[currentPiece->squareIndex - NUM_COLUMNS]->type != NO_PIECE) continue;
+      }
+
+      if(board[currentMove.moveDstIdx]->type != NO_PIECE) continue;
+      makeMove(currentMove.moveSrcIdx, currentMove.moveDstIdx);
       for(int k = 0; k < NUM_STARTING_PIECES; k++) {
         Piece* cp2 = playerToPieces[currentPlayer][k];
         if(cp2->healthPoints <= 0) continue; // no abilities for dead pieces
@@ -1280,15 +1296,15 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             default:
               break;
           }
-          PlayerAction p = PlayerAction(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx, currentAbility.abilitySrcIdx, currentAbility.abilityDstIdx);
+          PlayerAction p = PlayerAction(currentMove.moveSrcIdx, currentMove.moveDstIdx, currentAbility.abilitySrcIdx, currentAbility.abilityDstIdx);
           retval.push_back(p);
         }
       }
       // player can skip the ability
-      PlayerAction p = PlayerAction(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx, ABILITY_SKIP, ABILITY_SKIP);
+      PlayerAction p = PlayerAction(currentMove.moveSrcIdx, currentMove.moveDstIdx, ABILITY_SKIP, ABILITY_SKIP);
       retval.push_back(p);
 
-      undoMove(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx);
+      undoMove(currentMove.moveSrcIdx, currentMove.moveDstIdx);
     }
   }
   // player can skip the move
@@ -1666,8 +1682,24 @@ std::vector<PlayerAction> Game::allLegalActions() {
 
     auto legalMoves = pieceTypeToSquareIndexToLegalMoves[currentPiece->type][currentPiece->squareIndex];
     for(int j = 0; j < legalMoves.size(); j++) {
-      if(board[legalMoves[j].moveDstIdx]->type != NO_PIECE) continue;
-      makeMove(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx);
+      PlayerMove currentMove = legalMoves[j];
+      // Is p1 pawn trying to jump over another piece?
+      if(currentPiece->type == P1_PAWN &&
+          currentPiece->squareIndex - currentMove.moveDstIdx == -2 * NUM_COLUMNS 
+          ) {
+        // checks whether square in front of the p1 pawn is empty
+        if(board[currentPiece->squareIndex + NUM_COLUMNS]->type != NO_PIECE) continue;
+      }
+      // Is p2 pawn trying to jump over another piece?
+      if(currentPiece->type == P2_PAWN &&
+          currentPiece->squareIndex - currentMove.moveDstIdx == 2 * NUM_COLUMNS 
+          ) {
+        // checks whether square in front of the p2 pawn is empty
+        if(board[currentPiece->squareIndex - NUM_COLUMNS]->type != NO_PIECE) continue;
+      }
+
+      if(board[currentMove.moveDstIdx]->type != NO_PIECE) continue;
+      makeMove(currentMove.moveSrcIdx, currentMove.moveDstIdx);
       for(int k = 0; k < NUM_STARTING_PIECES; k++) {
         Piece* cp2 = playerToPieces[currentPlayer][k];
         if(cp2->healthPoints <= 0) continue; // no abilities for dead pieces
@@ -1676,15 +1708,15 @@ std::vector<PlayerAction> Game::allLegalActions() {
           PlayerAbility currentAbility = legalAbilities[l];
           Piece* destinationSquarePiece = board[currentAbility.abilityDstIdx];
 
-          PlayerAction p = PlayerAction(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx, currentAbility.abilitySrcIdx, currentAbility.abilityDstIdx);
+          PlayerAction p = PlayerAction(currentMove.moveSrcIdx, currentMove.moveDstIdx, currentAbility.abilitySrcIdx, currentAbility.abilityDstIdx);
           retval.push_back(p);
         }
       }
       // player can skip the ability
-      PlayerAction p = PlayerAction(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx, ABILITY_SKIP, ABILITY_SKIP);
+      PlayerAction p = PlayerAction(currentMove.moveSrcIdx, currentMove.moveDstIdx, ABILITY_SKIP, ABILITY_SKIP);
       retval.push_back(p);
 
-      undoMove(legalMoves[j].moveSrcIdx, legalMoves[j].moveDstIdx);
+      undoMove(currentMove.moveSrcIdx, currentMove.moveDstIdx);
     }
   }
   // player can skip the move
@@ -1755,6 +1787,22 @@ bool Game::isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int 
     auto legalMovesOnEmptyBoard = pieceTypeToSquareIndexToLegalMoves[movePiece->type][movePiece->squareIndex];
     for(int i = 0; i < legalMovesOnEmptyBoard.size(); i++) {
       PlayerMove currentMove = legalMovesOnEmptyBoard[i];
+      // Is p1 pawn trying to jump over another piece?
+      if(movePiece->type == P1_PAWN &&
+          movePiece->squareIndex - currentMove.moveDstIdx == -2 * NUM_COLUMNS 
+          ) {
+        // checks whether square in front of the p1 pawn is empty
+        if(board[movePiece->squareIndex + NUM_COLUMNS]->type != NO_PIECE) continue;
+      }
+
+      // Is p2 pawn trying to jump over another piece?
+      if(movePiece->type == P2_PAWN &&
+          movePiece->squareIndex - currentMove.moveDstIdx == 2 * NUM_COLUMNS 
+          ) {
+        // checks whether square in front of the p2 pawn is empty
+        if(board[movePiece->squareIndex - NUM_COLUMNS]->type != NO_PIECE) continue;
+      }
+
       if(board[currentMove.moveDstIdx]->type == NO_PIECE && 
           currentMove.moveDstIdx == moveDstIdx) {
         moveLegal = true;
