@@ -1785,7 +1785,7 @@ bool Game::isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int 
     }
   }
 
-  if(moveSrcIdx != MOVE_SKIP) {
+  if(moveSrcIdx != MOVE_SKIP && moveLegal) {
     undoMove(moveSrcIdx, moveDstIdx);
   }
 
