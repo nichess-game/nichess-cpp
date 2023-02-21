@@ -102,7 +102,7 @@ class UndoInfo {
 };
 
 class Game {
-  private:
+  public:
     Piece* board[NUM_ROWS * NUM_COLUMNS];
     Piece* p1King;
     Piece* p2King;
@@ -114,7 +114,6 @@ class Game {
     std::vector<std::vector<std::vector<PlayerAbility>>> pieceTypeToSquareIndexToLegalAbilities;
     std::vector<std::vector<int>> squareToNeighboringSquares;
 
-  public:
     Game();
     void makeMove(int moveSrcIdx, int moveDstIdx);
     void undoMove(int moveSrcIdx, int moveDstIdx);
