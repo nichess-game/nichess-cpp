@@ -108,7 +108,7 @@ class Game {
     Piece* p2King;
     std::vector<std::vector<Piece*>> playerToPieces{NUM_PLAYERS};
     Player currentPlayer;
-    UndoInfo moveNumberToUndoInfo[300];
+    std::vector<UndoInfo> moveNumberToUndoInfo{300};
     int moveNumber;
     std::vector<std::vector<std::vector<PlayerMove>>> pieceTypeToSquareIndexToLegalMoves;
     std::vector<std::vector<std::vector<PlayerAbility>>> pieceTypeToSquareIndexToLegalAbilities;
