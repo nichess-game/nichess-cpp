@@ -32,13 +32,13 @@ const int NUM_PIECE_TYPE = 13;
 
 // piece index is not the same thing as board(square) index
 // it is used as an array index for faster access to a specific piece
-const int KING_PIECE_INDEX = 0;
+const int MAGE_PIECE_INDEX = 0;
 const int ASSASSIN_PIECE_INDEX = 1;
-const int MAGE_PIECE_INDEX = 2;
-const int WARRIOR_PIECE_INDEX = 3;
-const int PAWN_1_PIECE_INDEX = 4;
-const int PAWN_2_PIECE_INDEX = 5;
-const int PAWN_3_PIECE_INDEX = 6;
+const int WARRIOR_PIECE_INDEX = 2;
+const int PAWN_1_PIECE_INDEX = 3;
+const int PAWN_2_PIECE_INDEX = 4;
+const int PAWN_3_PIECE_INDEX = 5;
+const int KING_PIECE_INDEX = 6;
 
 enum Player: int {
   PLAYER_1, PLAYER_2
