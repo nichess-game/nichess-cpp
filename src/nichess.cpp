@@ -243,6 +243,7 @@ void Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abi
   undoInfo.moveSrcIdx = moveSrcIdx;
   undoInfo.moveDstIdx = moveDstIdx;
   if(moveSrcIdx != MOVE_SKIP) {
+    delete board[moveDstIdx];
     board[moveDstIdx] = board[moveSrcIdx];
     board[moveDstIdx]->squareIndex = moveDstIdx;
     board[moveSrcIdx] = new Piece(PieceType::NO_PIECE, 0, moveSrcIdx);
@@ -431,6 +432,9 @@ void Game::undoLastAction() {
     case KING_DAMAGE:
       affectedPiece = undoInfo.affectedPieces[0];
       affectedPiece->healthPoints += KING_ABILITY_POINTS;
+      if(this->board[affectedPiece->squareIndex]->type == PieceType::NO_PIECE) {
+        delete this->board[affectedPiece->squareIndex];
+      }
       this->board[affectedPiece->squareIndex] = affectedPiece;
       break;
     case MAGE_DAMAGE:
@@ -438,30 +442,44 @@ void Game::undoLastAction() {
         affectedPiece = undoInfo.affectedPieces[i];
         if(affectedPiece == nullptr) continue;
         affectedPiece->healthPoints += MAGE_ABILITY_POINTS;
+        if(this->board[affectedPiece->squareIndex]->type == PieceType::NO_PIECE) {
+          delete this->board[affectedPiece->squareIndex];
+        }
         this->board[affectedPiece->squareIndex] = affectedPiece;
       }
       break;
     case WARRIOR_DAMAGE:
       affectedPiece = undoInfo.affectedPieces[0];
       affectedPiece->healthPoints += WARRIOR_ABILITY_POINTS;
+      if(this->board[affectedPiece->squareIndex]->type == PieceType::NO_PIECE) {
+        delete this->board[affectedPiece->squareIndex];
+      }
       this->board[affectedPiece->squareIndex] = affectedPiece;
       break;
     case ASSASSIN_DAMAGE:
       affectedPiece = undoInfo.affectedPieces[0];
       affectedPiece->healthPoints += ASSASSIN_ABILITY_POINTS;
+      if(this->board[affectedPiece->squareIndex]->type == PieceType::NO_PIECE) {
+        delete this->board[affectedPiece->squareIndex];
+      }
       this->board[affectedPiece->squareIndex] = affectedPiece;
       break;
     case PAWN_DAMAGE:
       affectedPiece = undoInfo.affectedPieces[0];
       affectedPiece->healthPoints += PAWN_ABILITY_POINTS;
+      if(this->board[affectedPiece->squareIndex]->type == PieceType::NO_PIECE) {
+        delete this->board[affectedPiece->squareIndex];
+      }
       this->board[affectedPiece->squareIndex] = affectedPiece;
       break;
     case PAWN_MAKE_WALL:
       affectedPiece = undoInfo.affectedPieces[0];
       this->board[affectedPiece->squareIndex] = new Piece(PieceType::NO_PIECE, 0, affectedPiece->squareIndex);
+      delete affectedPiece;
       break;
     case PAWN_DESTROY_WALL:
       affectedPiece = undoInfo.affectedPieces[0];
+      delete this->board[affectedPiece->squareIndex];
       this->board[affectedPiece->squareIndex] = affectedPiece;
       break;
     case NO_ABILITY:
@@ -502,6 +520,7 @@ void Game::print() {
 }
 
 void Game::makeMove(int moveSrcIdx, int moveDstIdx) {
+  delete board[moveDstIdx];
   board[moveDstIdx] = board[moveSrcIdx];
   board[moveDstIdx]->squareIndex = moveDstIdx;
   board[moveSrcIdx] = new Piece(PieceType::NO_PIECE, 0, moveSrcIdx);
@@ -512,6 +531,7 @@ void Game::makeMove(int moveSrcIdx, int moveDstIdx) {
  * Since move is being reverted, goal here is to move from "destination" to "source".
  */
 void Game::undoMove(int moveSrcIdx, int moveDstIdx) {
+  delete board[moveSrcIdx];
   board[moveSrcIdx] = board[moveDstIdx];
   board[moveSrcIdx]->squareIndex = moveSrcIdx;
   board[moveDstIdx] = new Piece(PieceType::NO_PIECE, 0, moveDstIdx);
