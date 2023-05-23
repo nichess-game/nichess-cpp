@@ -292,21 +292,11 @@ void Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abi
         }
         break;
       case P1_PAWN:
-        if(abilityDstPiece->type == P1_WALL || abilityDstPiece->type == P2_WALL) {
-          undoInfo.abilityType = AbilityType::PAWN_DESTROY_WALL;
-          undoInfo.affectedPieces[0] = abilityDstPiece;
-          board[abilityDstIdx] = new Piece(NO_PIECE, 0, abilityDstIdx); // destroy wall
-        } else if(abilityDstPiece->type == NO_PIECE) {
-          undoInfo.abilityType = AbilityType::PAWN_MAKE_WALL;
-          undoInfo.affectedPieces[0] = abilityDstPiece;
-          board[abilityDstIdx] = new Piece(P1_WALL, WALL_STARTING_HEALTH_POINTS, abilityDstIdx); // make wall
-        } else {
-          abilityDstPiece->healthPoints -= PAWN_ABILITY_POINTS; // damage piece
-          undoInfo.abilityType = AbilityType::PAWN_DAMAGE;
-          undoInfo.affectedPieces[0] = abilityDstPiece;
-          if(abilityDstPiece->healthPoints <= 0) {
-            board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
-          }
+        abilityDstPiece->healthPoints -= PAWN_ABILITY_POINTS;
+        undoInfo.abilityType = AbilityType::PAWN_DAMAGE;
+        undoInfo.affectedPieces[0] = abilityDstPiece;
+        if(abilityDstPiece->healthPoints <= 0) {
+          board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
         }
         break;
       case P1_WARRIOR:
@@ -320,8 +310,6 @@ void Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abi
         if(abilityDstPiece->healthPoints <= 0) {
           board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
         }
-        break;
-      case P1_WALL:
         break;
       case P1_ASSASSIN:
         if(player1OrEmpty(abilityDstPiece->type)) {
@@ -371,21 +359,11 @@ void Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abi
         }
         break;
       case P2_PAWN:
-        if(abilityDstPiece->type == P1_WALL || abilityDstPiece->type == P2_WALL) {
-          undoInfo.abilityType = AbilityType::PAWN_DESTROY_WALL;
-          undoInfo.affectedPieces[0] = abilityDstPiece;
-          board[abilityDstIdx] = new Piece(NO_PIECE, 0, abilityDstIdx); // destroy wall
-        } else if(abilityDstPiece->type == NO_PIECE) {
-          undoInfo.abilityType = AbilityType::PAWN_MAKE_WALL;
-          undoInfo.affectedPieces[0] = abilityDstPiece;
-          board[abilityDstIdx] = new Piece(P2_WALL, WALL_STARTING_HEALTH_POINTS, abilityDstIdx); // make wall
-        } else {
-          abilityDstPiece->healthPoints -= PAWN_ABILITY_POINTS; // damage piece
-          undoInfo.abilityType = AbilityType::PAWN_DAMAGE;
-          undoInfo.affectedPieces[0] = abilityDstPiece;
-          if(abilityDstPiece->healthPoints <= 0) {
-            board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
-          }
+        abilityDstPiece->healthPoints -= PAWN_ABILITY_POINTS;
+        undoInfo.abilityType = AbilityType::PAWN_DAMAGE;
+        undoInfo.affectedPieces[0] = abilityDstPiece;
+        if(abilityDstPiece->healthPoints <= 0) {
+          board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
         }
         break;
       case P2_WARRIOR:
@@ -399,8 +377,6 @@ void Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abi
         if(abilityDstPiece->healthPoints <= 0) {
           board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
         }
-        break;
-      case P2_WALL:
         break;
       case P2_ASSASSIN:
         if(player2OrEmpty(abilityDstPiece->type)) {
@@ -470,16 +446,6 @@ void Game::undoLastAction() {
       if(this->board[affectedPiece->squareIndex]->type == PieceType::NO_PIECE) {
         delete this->board[affectedPiece->squareIndex];
       }
-      this->board[affectedPiece->squareIndex] = affectedPiece;
-      break;
-    case PAWN_MAKE_WALL:
-      affectedPiece = undoInfo.affectedPieces[0];
-      this->board[affectedPiece->squareIndex] = new Piece(PieceType::NO_PIECE, 0, affectedPiece->squareIndex);
-      delete affectedPiece;
-      break;
-    case PAWN_DESTROY_WALL:
-      affectedPiece = undoInfo.affectedPieces[0];
-      delete this->board[affectedPiece->squareIndex];
       this->board[affectedPiece->squareIndex] = affectedPiece;
       break;
     case NO_ABILITY:
@@ -585,8 +551,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P1_WARRIOR:
             continue;
-          case P1_WALL:
-            continue;
           case P1_ASSASSIN:
             continue;
           case P2_KING:
@@ -596,8 +560,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           case P2_PAWN:
             break;
           case P2_WARRIOR:
-            break;
-          case P2_WALL:
             break;
           case P2_ASSASSIN:
             break;
@@ -617,8 +579,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P1_WARRIOR:
             continue;
-          case P1_WALL:
-            continue;
           case P1_ASSASSIN:
             continue;
           case P2_KING:
@@ -629,8 +589,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
           case P2_WARRIOR:
             break;
-          case P2_WALL:
-            break;
           case P2_ASSASSIN:
             break;
           case NO_PIECE:
@@ -639,7 +597,7 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
         }
         break;
-      // pawn can use abilities on enemy pieces, on allied walls and on empty squares
+      // pawn can only use abilities on enemy pieces
       case P1_PAWN:
         switch(destinationSquarePiece->type) {
           case P1_KING:
@@ -650,8 +608,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P1_WARRIOR:
             continue;
-          case P1_WALL:
-            break;
           case P1_ASSASSIN:
             continue;
           case P2_KING:
@@ -661,8 +617,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           case P2_PAWN:
             break;
           case P2_WARRIOR:
-            break;
-          case P2_WALL:
             break;
           case P2_ASSASSIN:
             break;
@@ -683,8 +637,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P1_WARRIOR:
             continue;
-          case P1_WALL:
-            continue;
           case P1_ASSASSIN:
             continue;
           case P2_KING:
@@ -695,8 +647,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
           case P2_WARRIOR:
             break;
-          case P2_WALL:
-            break;
           case P2_ASSASSIN:
             break;
           case NO_PIECE:
@@ -704,9 +654,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           default:
             break;
         }
-        break;
-      // wall can't use abilities
-      case P1_WALL:
         break;
       // assassin can only use abilities on enemy pieces
       case P1_ASSASSIN:
@@ -719,8 +666,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P1_WARRIOR:
             continue;
-          case P1_WALL:
-            continue;
           case P1_ASSASSIN:
             continue;
           case P2_KING:
@@ -730,8 +675,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           case P2_PAWN:
             break;
           case P2_WARRIOR:
-            break;
-          case P2_WALL:
             break;
           case P2_ASSASSIN:
             break;
@@ -753,8 +696,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
           case P1_WARRIOR:
             break;
-          case P1_WALL:
-            break;
           case P1_ASSASSIN:
             break;
           case P2_KING:
@@ -764,8 +705,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           case P2_PAWN:
             continue;
           case P2_WARRIOR:
-            continue;
-          case P2_WALL:
             continue;
           case P2_ASSASSIN:
             continue;
@@ -785,8 +724,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
           case P1_WARRIOR:
             break;
-          case P1_WALL:
-            break;
           case P1_ASSASSIN:
             break;
           case P2_KING:
@@ -797,8 +734,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P2_WARRIOR:
             continue;
-          case P2_WALL:
-            continue;
           case P2_ASSASSIN:
             continue;
           case NO_PIECE:
@@ -807,7 +742,7 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
         }
         break;
-      // pawn can use abilities on enemy pieces, on allied walls and on empty squares
+      // pawn can only use abilities on enemy pieces
       case P2_PAWN:
         switch(destinationSquarePiece->type) {
           case P1_KING:
@@ -818,8 +753,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
           case P1_WARRIOR:
             break;
-          case P1_WALL:
-            break;
           case P1_ASSASSIN:
             break;
           case P2_KING:
@@ -830,8 +763,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P2_WARRIOR:
             continue;
-          case P2_WALL:
-            break;
           case P2_ASSASSIN:
             continue;
           case NO_PIECE:
@@ -851,8 +782,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
           case P1_WARRIOR:
             break;
-          case P1_WALL:
-            break;
           case P1_ASSASSIN:
             break;
           case P2_KING:
@@ -863,8 +792,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             continue;
           case P2_WARRIOR:
             continue;
-          case P2_WALL:
-            continue;
           case P2_ASSASSIN:
             continue;
           case NO_PIECE:
@@ -872,9 +799,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           default:
             break;
         }
-        break;
-      // wall can't use abilities
-      case P2_WALL:
         break;
       // assassin can only use abilities on enemy pieces
       case P2_ASSASSIN:
@@ -887,8 +811,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
             break;
           case P1_WARRIOR:
             break;
-          case P1_WALL:
-            break;
           case P1_ASSASSIN:
             break;
           case P2_KING:
@@ -898,8 +820,6 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           case P2_PAWN:
             continue;
           case P2_WARRIOR:
-            continue;
-          case P2_WALL:
             continue;
           case P2_ASSASSIN:
             continue;
@@ -987,8 +907,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P1_WARRIOR:
                   continue;
-                case P1_WALL:
-                  continue;
                 case P1_ASSASSIN:
                   continue;
                 case P2_KING:
@@ -998,8 +916,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 case P2_PAWN:
                   break;
                 case P2_WARRIOR:
-                  break;
-                case P2_WALL:
                   break;
                 case P2_ASSASSIN:
                   break;
@@ -1019,8 +935,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P1_WARRIOR:
                   continue;
-                case P1_WALL:
-                  continue;
                 case P1_ASSASSIN:
                   continue;
                 case P2_KING:
@@ -1031,8 +945,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
                 case P2_WARRIOR:
                   break;
-                case P2_WALL:
-                  break;
                 case P2_ASSASSIN:
                   break;
                 case NO_PIECE:
@@ -1041,7 +953,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
               }
               break;
-            // pawn can use abilities on enemy pieces, on allied walls and on empty squares
+            // pawn can only use abilities on enemy pieces
             case P1_PAWN:
               switch(destinationSquarePiece->type) {
                 case P1_KING:
@@ -1052,8 +964,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P1_WARRIOR:
                   continue;
-                case P1_WALL:
-                  break;
                 case P1_ASSASSIN:
                   continue;
                 case P2_KING:
@@ -1063,8 +973,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 case P2_PAWN:
                   break;
                 case P2_WARRIOR:
-                  break;
-                case P2_WALL:
                   break;
                 case P2_ASSASSIN:
                   break;
@@ -1085,8 +993,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P1_WARRIOR:
                   continue;
-                case P1_WALL:
-                  continue;
                 case P1_ASSASSIN:
                   continue;
                 case P2_KING:
@@ -1097,8 +1003,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
                 case P2_WARRIOR:
                   break;
-                case P2_WALL:
-                  break;
                 case P2_ASSASSIN:
                   break;
                 case NO_PIECE:
@@ -1106,9 +1010,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 default:
                   break;
               }
-              break;
-            // wall can't use abilities
-            case P1_WALL:
               break;
             // assassin can only use abilities on enemy pieces
             case P1_ASSASSIN:
@@ -1121,8 +1022,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P1_WARRIOR:
                   continue;
-                case P1_WALL:
-                  continue;
                 case P1_ASSASSIN:
                   continue;
                 case P2_KING:
@@ -1132,8 +1031,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 case P2_PAWN:
                   break;
                 case P2_WARRIOR:
-                  break;
-                case P2_WALL:
                   break;
                 case P2_ASSASSIN:
                   break;
@@ -1155,8 +1052,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
                 case P1_WARRIOR:
                   break;
-                case P1_WALL:
-                  break;
                 case P1_ASSASSIN:
                   break;
                 case P2_KING:
@@ -1166,8 +1061,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 case P2_PAWN:
                   continue;
                 case P2_WARRIOR:
-                  continue;
-                case P2_WALL:
                   continue;
                 case P2_ASSASSIN:
                   continue;
@@ -1187,8 +1080,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
                 case P1_WARRIOR:
                   break;
-                case P1_WALL:
-                  break;
                 case P1_ASSASSIN:
                   break;
                 case P2_KING:
@@ -1199,8 +1090,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P2_WARRIOR:
                   continue;
-                case P2_WALL:
-                  continue;
                 case P2_ASSASSIN:
                   continue;
                 case NO_PIECE:
@@ -1209,7 +1098,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
               }
               break;
-            // pawn can use abilities on enemy pieces, on allied walls and on empty squares
+            // pawn can only use abilities on enemy pieces
             case P2_PAWN:
               switch(destinationSquarePiece->type) {
                 case P1_KING:
@@ -1220,8 +1109,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
                 case P1_WARRIOR:
                   break;
-                case P1_WALL:
-                  break;
                 case P1_ASSASSIN:
                   break;
                 case P2_KING:
@@ -1232,8 +1119,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P2_WARRIOR:
                   continue;
-                case P2_WALL:
-                  break;
                 case P2_ASSASSIN:
                   continue;
                 case NO_PIECE:
@@ -1253,8 +1138,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
                 case P1_WARRIOR:
                   break;
-                case P1_WALL:
-                  break;
                 case P1_ASSASSIN:
                   break;
                 case P2_KING:
@@ -1265,8 +1148,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   continue;
                 case P2_WARRIOR:
                   continue;
-                case P2_WALL:
-                  continue;
                 case P2_ASSASSIN:
                   continue;
                 case NO_PIECE:
@@ -1274,9 +1155,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 default:
                   break;
               }
-              break;
-            // wall can't use abilities
-            case P2_WALL:
               break;
             // assassin can only use abilities on enemy pieces
             case P2_ASSASSIN:
@@ -1289,8 +1167,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                   break;
                 case P1_WARRIOR:
                   break;
-                case P1_WALL:
-                  break;
                 case P1_ASSASSIN:
                   break;
                 case P2_KING:
@@ -1300,8 +1176,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 case P2_PAWN:
                   continue;
                 case P2_WARRIOR:
-                  continue;
-                case P2_WALL:
                   continue;
                 case P2_ASSASSIN:
                   continue;
@@ -1347,8 +1221,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P1_WARRIOR:
               continue;
-            case P1_WALL:
-              continue;
             case P1_ASSASSIN:
               continue;
             case P2_KING:
@@ -1358,8 +1230,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             case P2_PAWN:
               break;
             case P2_WARRIOR:
-              break;
-            case P2_WALL:
               break;
             case P2_ASSASSIN:
               break;
@@ -1379,8 +1249,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P1_WARRIOR:
               continue;
-            case P1_WALL:
-              continue;
             case P1_ASSASSIN:
               continue;
             case P2_KING:
@@ -1391,8 +1259,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
             case P2_WARRIOR:
               break;
-            case P2_WALL:
-              break;
             case P2_ASSASSIN:
               break;
             case NO_PIECE:
@@ -1401,7 +1267,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
           }
           break;
-        // pawn can use abilities on enemy pieces, on allied walls and on empty squares
+        // pawn can only use abilities on enemy pieces
         case P1_PAWN:
           switch(destinationSquarePiece->type) {
             case P1_KING:
@@ -1412,8 +1278,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P1_WARRIOR:
               continue;
-            case P1_WALL:
-              break;
             case P1_ASSASSIN:
               continue;
             case P2_KING:
@@ -1423,8 +1287,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             case P2_PAWN:
               break;
             case P2_WARRIOR:
-              break;
-            case P2_WALL:
               break;
             case P2_ASSASSIN:
               break;
@@ -1445,8 +1307,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P1_WARRIOR:
               continue;
-            case P1_WALL:
-              continue;
             case P1_ASSASSIN:
               continue;
             case P2_KING:
@@ -1457,8 +1317,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
             case P2_WARRIOR:
               break;
-            case P2_WALL:
-              break;
             case P2_ASSASSIN:
               break;
             case NO_PIECE:
@@ -1466,9 +1324,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             default:
               break;
           }
-          break;
-        // wall can't use abilities
-        case P1_WALL:
           break;
         // assassin can only use abilities on enemy pieces
         case P1_ASSASSIN:
@@ -1481,8 +1336,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P1_WARRIOR:
               continue;
-            case P1_WALL:
-              continue;
             case P1_ASSASSIN:
               continue;
             case P2_KING:
@@ -1492,8 +1345,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             case P2_PAWN:
               break;
             case P2_WARRIOR:
-              break;
-            case P2_WALL:
               break;
             case P2_ASSASSIN:
               break;
@@ -1515,8 +1366,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
             case P1_WARRIOR:
               break;
-            case P1_WALL:
-              break;
             case P1_ASSASSIN:
               break;
             case P2_KING:
@@ -1526,8 +1375,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             case P2_PAWN:
               continue;
             case P2_WARRIOR:
-              continue;
-            case P2_WALL:
               continue;
             case P2_ASSASSIN:
               continue;
@@ -1547,8 +1394,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
             case P1_WARRIOR:
               break;
-            case P1_WALL:
-              break;
             case P1_ASSASSIN:
               break;
             case P2_KING:
@@ -1559,8 +1404,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P2_WARRIOR:
               continue;
-            case P2_WALL:
-              continue;
             case P2_ASSASSIN:
               continue;
             case NO_PIECE:
@@ -1569,7 +1412,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
           }
           break;
-        // pawn can use abilities on enemy pieces, on allied walls and on empty squares
+        // pawn can only use abilities on enemy pieces
         case P2_PAWN:
           switch(destinationSquarePiece->type) {
             case P1_KING:
@@ -1580,8 +1423,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
             case P1_WARRIOR:
               break;
-            case P1_WALL:
-              break;
             case P1_ASSASSIN:
               break;
             case P2_KING:
@@ -1592,8 +1433,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P2_WARRIOR:
               continue;
-            case P2_WALL:
-              break;
             case P2_ASSASSIN:
               continue;
             case NO_PIECE:
@@ -1613,8 +1452,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
             case P1_WARRIOR:
               break;
-            case P1_WALL:
-              break;
             case P1_ASSASSIN:
               break;
             case P2_KING:
@@ -1625,8 +1462,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               continue;
             case P2_WARRIOR:
               continue;
-            case P2_WALL:
-              continue;
             case P2_ASSASSIN:
               continue;
             case NO_PIECE:
@@ -1634,9 +1469,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             default:
               break;
           }
-          break;
-        // wall can't use abilities
-        case P2_WALL:
           break;
         // assassin can only use abilities on enemy pieces
         case P2_ASSASSIN:
@@ -1649,8 +1481,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
               break;
             case P1_WARRIOR:
               break;
-            case P1_WALL:
-              break;
             case P1_ASSASSIN:
               break;
             case P2_KING:
@@ -1660,8 +1490,6 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             case P2_PAWN:
               continue;
             case P2_WARRIOR:
-              continue;
-            case P2_WALL:
               continue;
             case P2_ASSASSIN:
               continue;
@@ -1923,9 +1751,6 @@ std::string Game::boardToString() {
         case P1_WARRIOR:
           retval << "0-warrior-";
           break;
-        case P1_WALL:
-          retval << "0-wall-";
-          break;
         case P1_ASSASSIN:
           retval << "0-assassin-";
           break;
@@ -1940,9 +1765,6 @@ std::string Game::boardToString() {
           break;
         case P2_WARRIOR:
           retval << "1-warrior-";
-          break;
-        case P2_WALL:
-          retval << "1-wall-";
           break;
         case P2_ASSASSIN:
           retval << "1-assassin-";
@@ -2020,8 +1842,6 @@ void Game::boardFromString(std::string encodedBoard) {
       } else if(s == "0warrior") {
         board[boardIdx] = new Piece(PieceType::P1_WARRIOR, healthPoints, boardIdx);
         p1Pieces[WARRIOR_PIECE_INDEX] = board[boardIdx];
-      } else if(s == "0wall") {
-        board[boardIdx] = new Piece(PieceType::P1_WALL, healthPoints, boardIdx);
       } else if(s == "1king") {
         board[boardIdx] = new Piece(PieceType::P2_KING, healthPoints, boardIdx);
         p2Pieces[KING_PIECE_INDEX] = board[boardIdx];
@@ -2045,8 +1865,6 @@ void Game::boardFromString(std::string encodedBoard) {
       } else if(s == "1warrior") {
         board[boardIdx] = new Piece(PieceType::P2_WARRIOR, healthPoints, boardIdx);
         p2Pieces[WARRIOR_PIECE_INDEX] = board[boardIdx];
-      } else if(s == "1wall") {
-        board[boardIdx] = new Piece(PieceType::P2_WALL, healthPoints, boardIdx);
       }
     }
     b1.erase(0, pos + delimiter1.length());

@@ -21,8 +21,6 @@ std::string pieceTypeToString(PieceType pt) {
       return "P";
     case P1_WARRIOR:
       return "W";
-    case P1_WALL:
-      return "L";
     case P1_ASSASSIN:
       return "A";
     case P2_KING:
@@ -33,8 +31,6 @@ std::string pieceTypeToString(PieceType pt) {
       return "p";
     case P2_WARRIOR:
       return "w";
-    case P2_WALL:
-      return "l";
     case P2_ASSASSIN:
       return "a";
     case NO_PIECE:
@@ -54,8 +50,6 @@ bool player1OrEmpty(PieceType pt) {
       return true;
     case P1_WARRIOR:
       return true;
-    case P1_WALL:
-      return true;
     case P1_ASSASSIN:
       return true;
     case P2_KING:
@@ -65,8 +59,6 @@ bool player1OrEmpty(PieceType pt) {
     case P2_PAWN:
       return false;
     case P2_WARRIOR:
-      return false;
-    case P2_WALL:
       return false;
     case P2_ASSASSIN:
       return false;
@@ -86,8 +78,6 @@ bool player2OrEmpty(PieceType pt) {
       return false;
     case P1_WARRIOR:
       return false;
-    case P1_WALL:
-      return false;
     case P1_ASSASSIN:
       return false;
     case P2_KING:
@@ -97,8 +87,6 @@ bool player2OrEmpty(PieceType pt) {
     case P2_PAWN:
       return true;
     case P2_WARRIOR:
-      return true;
-    case P2_WALL:
       return true;
     case P2_ASSASSIN:
       return true;
@@ -118,8 +106,6 @@ bool pieceBelongsToPlayer(PieceType pt, Player player) {
         return player == PLAYER_1;
       case P1_WARRIOR:
         return player == PLAYER_1;
-      case P1_WALL:
-        return player == PLAYER_1;
       case P1_ASSASSIN:
         return player == PLAYER_1;
       case P2_KING:
@@ -129,8 +115,6 @@ bool pieceBelongsToPlayer(PieceType pt, Player player) {
       case P2_PAWN:
         return player == PLAYER_2;
       case P2_WARRIOR:
-        return player == PLAYER_2;
-      case P2_WALL:
         return player == PLAYER_2;
       case P2_ASSASSIN:
         return player == PLAYER_2;
@@ -251,18 +235,6 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
     }
   }
   pieceTypeToSquareToLegalMoves[P1_WARRIOR] = squareToP1WarriorMoves;
-
-  // p1 wall moves
-  // walls can't move
-  std::vector<std::vector<PlayerMove>> squareToP1WallMoves{NUM_ROWS*NUM_COLUMNS};
-  for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
-    for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
-      int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
-      std::vector<PlayerMove> playerMoves;
-      squareToP1WallMoves[srcSquareIndex] = playerMoves;
-    }
-  }
-  pieceTypeToSquareToLegalMoves[P1_WALL] = squareToP1WallMoves;
 
   // p1 assassin moves
   std::vector<std::vector<PlayerMove>> squareToP1AssassinMoves{NUM_ROWS*NUM_COLUMNS};
@@ -401,18 +373,6 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
     }
   }
   pieceTypeToSquareToLegalMoves[P2_WARRIOR] = squareToP2WarriorMoves;
-
-  // p2 wall moves
-  // walls can't move
-  std::vector<std::vector<PlayerMove>> squareToP2WallMoves{NUM_ROWS*NUM_COLUMNS};
-  for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
-    for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
-      int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
-      std::vector<PlayerMove> playerMoves;
-      squareToP2WallMoves[srcSquareIndex] = playerMoves;
-    }
-  }
-  pieceTypeToSquareToLegalMoves[P2_WALL] = squareToP2WallMoves;
 
   // p2 assassin moves
   std::vector<std::vector<PlayerMove>> squareToP2AssassinMoves{NUM_ROWS*NUM_COLUMNS};
@@ -566,18 +526,6 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   }
   pieceTypeToSquareToLegalAbilities[P1_WARRIOR] = squareToP1WarriorAbilities;
 
-  // p1 wall abilities
-  // walls can't ability
-  std::vector<std::vector<PlayerAbility>> squareToP1WallAbilities{NUM_ROWS*NUM_COLUMNS};
-  for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
-    for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
-      int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
-      std::vector<PlayerAbility> playerAbilities;
-      squareToP1WallAbilities[srcSquareIndex] = playerAbilities;
-    }
-  }
-  pieceTypeToSquareToLegalAbilities[P1_WALL] = squareToP1WallAbilities;
-
   // p1 assassin abilities
   std::vector<std::vector<PlayerAbility>> squareToP1AssassinAbilities{NUM_ROWS*NUM_COLUMNS};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
@@ -682,18 +630,6 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
     }
   }
   pieceTypeToSquareToLegalAbilities[P2_WARRIOR] = squareToP2WarriorAbilities;
-
-  // p2 wall abilities
-  // walls can't ability
-  std::vector<std::vector<PlayerAbility>> squareToP2WallAbilities{NUM_ROWS*NUM_COLUMNS};
-  for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
-    for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
-      int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
-      std::vector<PlayerAbility> playerAbilities;
-      squareToP2WallAbilities[srcSquareIndex] = playerAbilities;
-    }
-  }
-  pieceTypeToSquareToLegalAbilities[P2_WALL] = squareToP2WallAbilities;
 
   // p2 assassin abilities
   std::vector<std::vector<PlayerAbility>> squareToP2AssassinAbilities{NUM_ROWS*NUM_COLUMNS};
