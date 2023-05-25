@@ -106,7 +106,6 @@ class Game {
     Piece* p2King;
     std::vector<std::vector<Piece*>> playerToPieces{NUM_PLAYERS};
     Player currentPlayer;
-    std::vector<UndoInfo> moveNumberToUndoInfo{300};
     int moveNumber;
     std::vector<std::vector<std::vector<PlayerMove>>> pieceTypeToSquareIndexToLegalMoves;
     std::vector<std::vector<std::vector<PlayerAbility>>> pieceTypeToSquareIndexToLegalAbilities;
@@ -117,7 +116,6 @@ class Game {
     void undoMove(int moveSrcIdx, int moveDstIdx);
     bool isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abilityDstIdx);
     void makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abilityDstIdx);
-    void undoLastAction();
     std::vector<PlayerAction> usefulLegalActions();
     std::vector<PlayerAction> allLegalActions();
     std::vector<PlayerMove> legalMovesByPiece(int srcSquareIdx);
@@ -138,7 +136,5 @@ class Game {
 int coordinatesToBoardIndex(int column, int row);
 
 std::tuple<int, int> boardIndexToCoordinates(int squareIndex);
-
-unsigned long long perft(Game& game, int depth);
 
 } // namespace nichess
