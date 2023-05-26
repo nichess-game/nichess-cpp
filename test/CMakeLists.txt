@@ -1,9 +1,10 @@
 set(TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 set (cpptests
-      legalactions
+      legalactions undoactions
     )
 set (legalactions_parts 1 2 3)
+set (undoactions_parts 1)
 
 foreach(cpptest ${cpptests})
   set(cpptestsrc ${cpptestsrc} ${cpptest}test.cpp)
