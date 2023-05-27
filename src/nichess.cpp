@@ -109,6 +109,25 @@ Piece::Piece(PieceType type, int healthPoints, int squareIndex):
   healthPoints(healthPoints),
   squareIndex(squareIndex)
 { }
+
+Piece::Piece(const Piece& other): type(other.type), healthPoints(other.healthPoints), squareIndex(other.squareIndex) { }
+
+bool Piece::operator==(const Piece& other) const {
+  const auto* other_cs = dynamic_cast<const Piece*>(&other);
+  if (other_cs == nullptr) {
+    return false;
+  }
+  return (other_cs->type == type && other_cs->healthPoints == healthPoints && other_cs->squareIndex == squareIndex);
+}
+
+bool Piece::operator!=(const Piece& other) const {
+  const auto* other_cs = dynamic_cast<const Piece*>(&other);
+  if (other_cs == nullptr) {
+    return true;
+  }
+  return (other_cs->type != type || other_cs->healthPoints != healthPoints || other_cs->squareIndex != squareIndex);
+}
+
     
 void Piece::print() {
   std::stringstream ss;
@@ -235,6 +254,139 @@ Game::Game(GameCache& gameCache) {
   this->gameCache = &gameCache;
   reset();
 }
+
+Game::Game(const Game& other) {
+  this->moveNumber = other.moveNumber;
+  this->currentPlayer = other.currentPlayer;
+  this->gameCache = other.gameCache;
+  for(int i = 0; i < NUM_ROWS * NUM_COLUMNS; i++) {
+    board[i] = new Piece(*other.board[i]);
+  }
+
+  std::vector<Piece*> otherP1Pieces = other.playerToPieces[PLAYER_1];
+  std::vector<Piece*> otherP2Pieces = other.playerToPieces[PLAYER_2];
+  std::vector<Piece*> p1Pieces{NUM_STARTING_PIECES};
+
+  Piece* otherP1King = otherP1Pieces[KING_PIECE_INDEX];
+  if(otherP1King->healthPoints > 0) {
+    p1Pieces[KING_PIECE_INDEX] = board[otherP1King->squareIndex];
+  } else {
+    p1Pieces[KING_PIECE_INDEX] = new Piece(PieceType::P1_KING, otherP1King->healthPoints, otherP1King->squareIndex);
+  }
+  p1King = p1Pieces[KING_PIECE_INDEX];
+
+  Piece* otherP1Pawn1 = otherP1Pieces[PAWN_1_PIECE_INDEX];
+  if(otherP1Pawn1->healthPoints > 0) {
+    p1Pieces[PAWN_1_PIECE_INDEX] = board[otherP1Pawn1->squareIndex];
+  } else {
+    p1Pieces[PAWN_1_PIECE_INDEX] = new Piece(PieceType::P1_PAWN, otherP1Pawn1->healthPoints, otherP1Pawn1->squareIndex);
+  }
+
+  Piece* otherP1Pawn2 = otherP1Pieces[PAWN_2_PIECE_INDEX];
+  if(otherP1Pawn2->healthPoints > 0) {
+    p1Pieces[PAWN_2_PIECE_INDEX] = board[otherP1Pawn2->squareIndex];
+  } else {
+    p1Pieces[PAWN_2_PIECE_INDEX] = new Piece(PieceType::P1_PAWN, otherP1Pawn2->healthPoints, otherP1Pawn2->squareIndex);
+  }
+
+  Piece* otherP1Assassin = otherP1Pieces[ASSASSIN_PIECE_INDEX];
+  if(otherP1Assassin->healthPoints > 0) {
+    p1Pieces[ASSASSIN_PIECE_INDEX] = board[otherP1Assassin->squareIndex];
+  } else {
+    p1Pieces[ASSASSIN_PIECE_INDEX] = new Piece(PieceType::P1_ASSASSIN, otherP1Assassin->healthPoints, otherP1Assassin->squareIndex);
+  }
+
+  Piece* otherP1Warrior = otherP1Pieces[WARRIOR_PIECE_INDEX];
+  if(otherP1Warrior->healthPoints > 0) {
+    p1Pieces[WARRIOR_PIECE_INDEX] = board[otherP1Warrior->squareIndex];
+  } else {
+    p1Pieces[WARRIOR_PIECE_INDEX] = new Piece(PieceType::P1_WARRIOR, otherP1Warrior->healthPoints, otherP1Warrior->squareIndex);
+  }
+
+  Piece* otherP1Mage = otherP1Pieces[MAGE_PIECE_INDEX];
+  if(otherP1Mage->healthPoints > 0) {
+    p1Pieces[MAGE_PIECE_INDEX] = board[otherP1Mage->squareIndex];
+  } else {
+    p1Pieces[MAGE_PIECE_INDEX] = new Piece(PieceType::P1_MAGE, otherP1Mage->healthPoints, otherP1Mage->squareIndex);
+  }
+
+  Piece* otherP1Pawn3 = otherP1Pieces[PAWN_3_PIECE_INDEX];
+  if(otherP1Pawn3->healthPoints > 0) {
+    p1Pieces[PAWN_3_PIECE_INDEX] = board[otherP1Pawn3->squareIndex];
+  } else {
+    p1Pieces[PAWN_3_PIECE_INDEX] = new Piece(PieceType::P1_PAWN, otherP1Pawn3->healthPoints, otherP1Pawn3->squareIndex);
+  }
+
+  playerToPieces[Player::PLAYER_1] = p1Pieces;
+
+  std::vector<Piece*> p2Pieces{NUM_STARTING_PIECES};
+
+  Piece* otherP2King = otherP2Pieces[KING_PIECE_INDEX];
+  if(otherP2King->healthPoints > 0) {
+    p2Pieces[KING_PIECE_INDEX] = board[otherP2King->squareIndex];
+  } else {
+    p2Pieces[KING_PIECE_INDEX] = new Piece(PieceType::P2_KING, otherP2King->healthPoints, otherP2King->squareIndex);
+  }
+  p2King = p2Pieces[KING_PIECE_INDEX];
+
+  Piece* otherP2Pawn1 = otherP2Pieces[PAWN_1_PIECE_INDEX];
+  if(otherP2Pawn1->healthPoints > 0) {
+    p2Pieces[PAWN_1_PIECE_INDEX] = board[otherP2Pawn1->squareIndex];
+  } else {
+    p2Pieces[PAWN_1_PIECE_INDEX] = new Piece(PieceType::P2_PAWN, otherP2Pawn1->healthPoints, otherP2Pawn1->squareIndex);
+  }
+
+  Piece* otherP2Pawn2 = otherP2Pieces[PAWN_2_PIECE_INDEX];
+  if(otherP2Pawn2->healthPoints > 0) {
+    p2Pieces[PAWN_2_PIECE_INDEX] = board[otherP2Pawn2->squareIndex];
+  } else {
+    p2Pieces[PAWN_2_PIECE_INDEX] = new Piece(PieceType::P2_PAWN, otherP2Pawn2->healthPoints, otherP2Pawn2->squareIndex);
+  }
+
+  Piece* otherP2Assassin = otherP2Pieces[ASSASSIN_PIECE_INDEX];
+  if(otherP2Assassin->healthPoints > 0) {
+    p2Pieces[ASSASSIN_PIECE_INDEX] = board[otherP2Assassin->squareIndex];
+  } else {
+    p2Pieces[ASSASSIN_PIECE_INDEX] = new Piece(PieceType::P2_ASSASSIN, otherP2Assassin->healthPoints, otherP2Assassin->squareIndex);
+  }
+
+  Piece* otherP2Warrior = otherP2Pieces[WARRIOR_PIECE_INDEX];
+  if(otherP2Warrior->healthPoints > 0) {
+    p2Pieces[WARRIOR_PIECE_INDEX] = board[otherP2Warrior->squareIndex];
+  } else {
+    p2Pieces[WARRIOR_PIECE_INDEX] = new Piece(PieceType::P2_WARRIOR, otherP2Warrior->healthPoints, otherP2Warrior->squareIndex);
+  }
+
+  Piece* otherP2Mage = otherP2Pieces[MAGE_PIECE_INDEX];
+  if(otherP2Mage->healthPoints > 0) {
+    p2Pieces[MAGE_PIECE_INDEX] = board[otherP2Mage->squareIndex];
+  } else {
+    p2Pieces[MAGE_PIECE_INDEX] = new Piece(PieceType::P2_MAGE, otherP2Mage->healthPoints, otherP2Mage->squareIndex);
+  }
+
+  Piece* otherP2Pawn3 = otherP2Pieces[PAWN_3_PIECE_INDEX];
+  if(otherP2Pawn3->healthPoints > 0) {
+    p2Pieces[PAWN_3_PIECE_INDEX] = board[otherP2Pawn3->squareIndex];
+  } else {
+    p2Pieces[PAWN_3_PIECE_INDEX] = new Piece(PieceType::P2_PAWN, otherP2Pawn3->healthPoints, otherP2Pawn3->squareIndex);
+  }
+
+  playerToPieces[Player::PLAYER_2] = p2Pieces;
+}
+
+Game::~Game() {
+  for(Piece* p: playerToPieces[PLAYER_1]) {
+    if(p->healthPoints <= 0) delete p;
+  }
+  for(Piece* p: playerToPieces[PLAYER_2]) {
+    if(p->healthPoints <= 0) delete p;
+  }
+
+  for(int i = 0; i < NUM_ROWS * NUM_COLUMNS; i++) {
+    delete board[i];
+  }
+}
+
 
 /*
  * Assumes that the move and ability are legal.

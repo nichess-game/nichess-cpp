@@ -63,6 +63,9 @@ class Piece {
     int squareIndex;
     Piece();
     Piece(PieceType type, int healthPoints, int squareIndex);
+    Piece(const Piece& other);
+    bool operator==(const Piece& other) const;
+    bool operator!=(const Piece& other) const;
     void print();
 };
 
@@ -132,6 +135,8 @@ class Game {
     GameCache *gameCache;
 
     Game(GameCache &gameCache);
+    Game(const Game& other);
+    ~Game();
     void makeMove(int moveSrcIdx, int moveDstIdx);
     void undoMove(int moveSrcIdx, int moveDstIdx);
     bool isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abilityDstIdx);
