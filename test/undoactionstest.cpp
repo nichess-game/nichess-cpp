@@ -1,9 +1,18 @@
 #include "nichess/nichess.hpp"
+#include "nichess/util.hpp"
 
 using namespace nichess;
 
 int undoActionTest1() {
-  Game g = Game();
+  auto pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
+  auto pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
+  auto squareToNeighboringSquares = generateSquareToNeighboringSquares();
+  Game g = Game(
+    pieceTypeToSquareIndexToLegalMoves,
+    pieceTypeToSquareIndexToLegalAbilities,
+    squareToNeighboringSquares
+  );
+
   std::vector<PlayerAction> legalActions = g.usefulLegalActions();
   PlayerAction pa = legalActions[0];
   std::string b1 = g.boardToString();

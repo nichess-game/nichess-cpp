@@ -100,6 +100,8 @@ class UndoInfo {
 };
 
 class Game {
+  private:
+    Game();
   public:
     Piece* board[NUM_ROWS * NUM_COLUMNS];
     Piece* p1King;
@@ -107,11 +109,15 @@ class Game {
     std::vector<std::vector<Piece*>> playerToPieces{NUM_PLAYERS};
     Player currentPlayer;
     int moveNumber;
-    std::vector<std::vector<std::vector<PlayerMove>>> pieceTypeToSquareIndexToLegalMoves;
-    std::vector<std::vector<std::vector<PlayerAbility>>> pieceTypeToSquareIndexToLegalAbilities;
-    std::vector<std::vector<int>> squareToNeighboringSquares;
+    std::vector<std::vector<std::vector<PlayerMove>>> *pieceTypeToSquareIndexToLegalMoves;
+    std::vector<std::vector<std::vector<PlayerAbility>>> *pieceTypeToSquareIndexToLegalAbilities;
+    std::vector<std::vector<int>> *squareToNeighboringSquares;
 
-    Game();
+    Game(
+      std::vector<std::vector<std::vector<PlayerMove>>> &pieceTypeToSquareIndexToLegalMoves,
+      std::vector<std::vector<std::vector<PlayerAbility>>> &pieceTypeToSquareIndexToLegalAbilities,
+      std::vector<std::vector<int>> &squareToNeighboringSquares
+    );
     void makeMove(int moveSrcIdx, int moveDstIdx);
     void undoMove(int moveSrcIdx, int moveDstIdx);
     bool isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abilityDstIdx);

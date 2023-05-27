@@ -1,9 +1,18 @@
 #include "nichess/nichess.hpp"
+#include "nichess/util.hpp"
 
 using namespace nichess;
 
 int test1() {
-  Game g = Game();
+  auto pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
+  auto pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
+  auto squareToNeighboringSquares = generateSquareToNeighboringSquares();
+  Game g = Game(
+    pieceTypeToSquareIndexToLegalMoves,
+    pieceTypeToSquareIndexToLegalAbilities,
+    squareToNeighboringSquares
+  );
+
   std::vector<PlayerAction> legalActions = g.usefulLegalActions();
   if(legalActions.size() == 707) {
     return 0;
@@ -13,7 +22,14 @@ int test1() {
 }
 
 int test2() {
-  Game g = Game();
+  auto pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
+  auto pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
+  auto squareToNeighboringSquares = generateSquareToNeighboringSquares();
+  Game g = Game(
+    pieceTypeToSquareIndexToLegalMoves,
+    pieceTypeToSquareIndexToLegalAbilities,
+    squareToNeighboringSquares
+  );
   g.boardFromString("0|0-king-140,1-pawn-10,empty,empty,empty,empty,empty,empty,empty,0-pawn-210,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,1-pawn-70,empty,0-pawn-30,empty,empty,empty,0-warrior-80,empty,empty,empty,empty,empty,empty,empty,1-pawn-100,empty,empty,empty,1-king-200,");
 
   std::vector<PlayerAction> legalActions = g.usefulLegalActions();
@@ -26,7 +42,14 @@ int test2() {
 }
 
 int test3() {
-  Game g = Game();
+  auto pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
+  auto pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
+  auto squareToNeighboringSquares = generateSquareToNeighboringSquares();
+  Game g = Game(
+    pieceTypeToSquareIndexToLegalMoves,
+    pieceTypeToSquareIndexToLegalAbilities,
+    squareToNeighboringSquares
+  );
   g.boardFromString("0|0-king-200,empty,empty,empty,empty,empty,empty,0-assassin-110,empty,0-pawn-300,empty,0-warrior-500,0-mage-230,0-pawn-300,empty,empty,empty,0-pawn-300,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,1-pawn-300,1-mage-230,1-warrior-500,empty,1-pawn-300,1-pawn-300,1-assassin-110,empty,empty,empty,empty,empty,empty,1-king-200,");
 
   std::vector<PlayerAction> legalActions = g.usefulLegalActions();
