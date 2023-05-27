@@ -99,6 +99,26 @@ class UndoInfo {
     UndoInfo(int moveSrcIdx, int moveDstIdx, AbilityType abilityType);
 };
 
+/*
+ * Used for faster generation and validation of actions.
+ */
+class GameCache {
+  public:
+    std::vector<std::vector<std::vector<PlayerMove>>> pieceTypeToSquareIndexToLegalMoves;
+    std::vector<std::vector<std::vector<PlayerAbility>>> pieceTypeToSquareIndexToLegalAbilities;
+    std::vector<std::vector<int>> squareToNeighboringSquares;
+    
+    GameCache(); 
+    
+    /*
+    {
+      pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
+      pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
+      squareToNeighboringSquares = generateSquareToNeighboringSquares();
+    }
+    */
+};
+
 class Game {
   private:
     Game();
@@ -109,15 +129,9 @@ class Game {
     std::vector<std::vector<Piece*>> playerToPieces{NUM_PLAYERS};
     Player currentPlayer;
     int moveNumber;
-    std::vector<std::vector<std::vector<PlayerMove>>> *pieceTypeToSquareIndexToLegalMoves;
-    std::vector<std::vector<std::vector<PlayerAbility>>> *pieceTypeToSquareIndexToLegalAbilities;
-    std::vector<std::vector<int>> *squareToNeighboringSquares;
+    GameCache *gameCache;
 
-    Game(
-      std::vector<std::vector<std::vector<PlayerMove>>> &pieceTypeToSquareIndexToLegalMoves,
-      std::vector<std::vector<std::vector<PlayerAbility>>> &pieceTypeToSquareIndexToLegalAbilities,
-      std::vector<std::vector<int>> &squareToNeighboringSquares
-    );
+    Game(GameCache &gameCache);
     void makeMove(int moveSrcIdx, int moveDstIdx);
     void undoMove(int moveSrcIdx, int moveDstIdx);
     bool isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abilityDstIdx);

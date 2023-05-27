@@ -4,14 +4,8 @@
 using namespace nichess;
 
 int undoActionTest1() {
-  auto pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
-  auto pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
-  auto squareToNeighboringSquares = generateSquareToNeighboringSquares();
-  Game g = Game(
-    pieceTypeToSquareIndexToLegalMoves,
-    pieceTypeToSquareIndexToLegalAbilities,
-    squareToNeighboringSquares
-  );
+  GameCache cache = GameCache();
+  Game g = Game(cache);
 
   std::vector<PlayerAction> legalActions = g.usefulLegalActions();
   PlayerAction pa = legalActions[0];

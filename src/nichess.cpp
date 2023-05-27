@@ -131,6 +131,12 @@ UndoInfo::UndoInfo(int moveSrcIdx, int moveDstIdx, AbilityType abilityType) {
   }
 }
 
+GameCache::GameCache() {
+  pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
+  pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
+  squareToNeighboringSquares = generateSquareToNeighboringSquares();
+}
+
 void Game::reset() {
   moveNumber = 0;
   currentPlayer = Player::PLAYER_1;
@@ -225,14 +231,8 @@ void Game::reset() {
 }
 
 
-Game::Game(
-      std::vector<std::vector<std::vector<PlayerMove>>>& pieceTypeToSquareIndexToLegalMoves,
-      std::vector<std::vector<std::vector<PlayerAbility>>>& pieceTypeToSquareIndexToLegalAbilities,
-      std::vector<std::vector<int>>& squareToNeighboringSquares
-    ) {
-  this->pieceTypeToSquareIndexToLegalMoves = &pieceTypeToSquareIndexToLegalMoves;
-  this->pieceTypeToSquareIndexToLegalAbilities = &pieceTypeToSquareIndexToLegalAbilities;
-  this->squareToNeighboringSquares = &squareToNeighboringSquares;
+Game::Game(GameCache& gameCache) {
+  this->gameCache = &gameCache;
   reset();
 }
 
@@ -283,8 +283,8 @@ UndoInfo Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int
         if(abilityDstPiece->healthPoints <= 0) {
           board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
         }
-        for(int i = 0; i < (*squareToNeighboringSquares)[abilityDstIdx].size(); i++) {
-          neighboringSquare = (*squareToNeighboringSquares)[abilityDstIdx][i];
+        for(int i = 0; i < gameCache->squareToNeighboringSquares[abilityDstIdx].size(); i++) {
+          neighboringSquare = gameCache->squareToNeighboringSquares[abilityDstIdx][i];
           neighboringPiece = board[neighboringSquare];
           if(player1OrEmpty(neighboringPiece->type)) continue;  // don't damage your own pieces
           neighboringPiece->healthPoints -= MAGE_ABILITY_POINTS;
@@ -354,8 +354,8 @@ UndoInfo Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int
         if(abilityDstPiece->healthPoints <= 0) {
           board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
         }
-        for(int i = 0; i < (*squareToNeighboringSquares)[abilityDstIdx].size(); i++) {
-          neighboringSquare = (*squareToNeighboringSquares)[abilityDstIdx][i];
+        for(int i = 0; i < gameCache->squareToNeighboringSquares[abilityDstIdx].size(); i++) {
+          neighboringSquare = gameCache->squareToNeighboringSquares[abilityDstIdx][i];
           neighboringPiece = board[neighboringSquare];
           if(player2OrEmpty(neighboringPiece->type)) continue;  // don't damage your own pieces
           neighboringPiece->healthPoints -= MAGE_ABILITY_POINTS;
@@ -522,7 +522,7 @@ std::vector<PlayerMove> Game::legalMovesByPiece(int srcSquareIdx) {
       piece->healthPoints <= 0) {
     return retval;
   }
-  auto legalMovesOnEmptyBoard = (*pieceTypeToSquareIndexToLegalMoves)[piece->type][piece->squareIndex];
+  auto legalMovesOnEmptyBoard = gameCache->pieceTypeToSquareIndexToLegalMoves[piece->type][piece->squareIndex];
   for(int i = 0; i < legalMovesOnEmptyBoard.size(); i++) {
     if(board[legalMovesOnEmptyBoard[i].moveDstIdx]->type != NO_PIECE) continue;
     retval.push_back(legalMovesOnEmptyBoard[i]);
@@ -542,7 +542,7 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
       piece->healthPoints <= 0) {
     return retval;
   }
-  auto legalAbilitiesOnEmptyBoard = (*pieceTypeToSquareIndexToLegalAbilities)[piece->type][piece->squareIndex];
+  auto legalAbilitiesOnEmptyBoard = gameCache->pieceTypeToSquareIndexToLegalAbilities[piece->type][piece->squareIndex];
   for(int l = 0; l < legalAbilitiesOnEmptyBoard.size(); l++) {
     PlayerAbility currentAbility = legalAbilitiesOnEmptyBoard[l];
     Piece* destinationSquarePiece = board[currentAbility.abilityDstIdx];
@@ -857,7 +857,7 @@ std::vector<PlayerAbility> Game::allLegalAbilitiesByPiece(int srcSquareIdx) {
       piece->healthPoints <= 0) {
     return retval;
   }
-  retval = (*pieceTypeToSquareIndexToLegalAbilities)[piece->type][piece->squareIndex];
+  retval = gameCache->pieceTypeToSquareIndexToLegalAbilities[piece->type][piece->squareIndex];
   return retval;
 }
 
@@ -875,7 +875,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
     Piece* currentPiece = playerToPieces[currentPlayer][i];
     if(currentPiece->healthPoints <= 0) continue; // dead pieces don't move
 
-    auto legalMoves = (*pieceTypeToSquareIndexToLegalMoves)[currentPiece->type][currentPiece->squareIndex];
+    auto legalMoves = gameCache->pieceTypeToSquareIndexToLegalMoves[currentPiece->type][currentPiece->squareIndex];
     for(int j = 0; j < legalMoves.size(); j++) {
       PlayerMove currentMove = legalMoves[j];
       // Is p1 pawn trying to jump over another piece?
@@ -898,7 +898,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
       for(int k = 0; k < NUM_STARTING_PIECES; k++) {
         Piece* cp2 = playerToPieces[currentPlayer][k];
         if(cp2->healthPoints <= 0) continue; // no abilities for dead pieces
-        auto legalAbilities = (*pieceTypeToSquareIndexToLegalAbilities)[cp2->type][cp2->squareIndex];
+        auto legalAbilities = gameCache->pieceTypeToSquareIndexToLegalAbilities[cp2->type][cp2->squareIndex];
         for(int l = 0; l < legalAbilities.size(); l++) {
           PlayerAbility currentAbility = legalAbilities[l];
           Piece* destinationSquarePiece = board[currentAbility.abilityDstIdx];
@@ -1213,7 +1213,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
   for(int k = 0; k < NUM_STARTING_PIECES; k++) {
     Piece* cp2 = playerToPieces[currentPlayer][k];
     if(cp2->healthPoints <= 0) continue; // no abilities for dead pieces
-    auto legalAbilities = (*pieceTypeToSquareIndexToLegalAbilities)[cp2->type][cp2->squareIndex];
+    auto legalAbilities = gameCache->pieceTypeToSquareIndexToLegalAbilities[cp2->type][cp2->squareIndex];
     for(int l = 0; l < legalAbilities.size(); l++) {
       Piece* destinationSquarePiece = board[legalAbilities[l].abilityDstIdx];
       // exclude useless abilities
@@ -1536,7 +1536,7 @@ std::vector<PlayerAction> Game::allLegalActions() {
     Piece* currentPiece = playerToPieces[currentPlayer][i];
     if(currentPiece->healthPoints <= 0) continue; // dead pieces don't move
 
-    auto legalMoves = (*pieceTypeToSquareIndexToLegalMoves)[currentPiece->type][currentPiece->squareIndex];
+    auto legalMoves = gameCache->pieceTypeToSquareIndexToLegalMoves[currentPiece->type][currentPiece->squareIndex];
     for(int j = 0; j < legalMoves.size(); j++) {
       PlayerMove currentMove = legalMoves[j];
       // Is p1 pawn trying to jump over another piece?
@@ -1559,7 +1559,7 @@ std::vector<PlayerAction> Game::allLegalActions() {
       for(int k = 0; k < NUM_STARTING_PIECES; k++) {
         Piece* cp2 = playerToPieces[currentPlayer][k];
         if(cp2->healthPoints <= 0) continue; // no abilities for dead pieces
-        auto legalAbilities = (*pieceTypeToSquareIndexToLegalAbilities)[cp2->type][cp2->squareIndex];
+        auto legalAbilities = gameCache->pieceTypeToSquareIndexToLegalAbilities[cp2->type][cp2->squareIndex];
         for(int l = 0; l < legalAbilities.size(); l++) {
           PlayerAbility currentAbility = legalAbilities[l];
           Piece* destinationSquarePiece = board[currentAbility.abilityDstIdx];
@@ -1579,7 +1579,7 @@ std::vector<PlayerAction> Game::allLegalActions() {
   for(int k = 0; k < NUM_STARTING_PIECES; k++) {
     Piece* cp2 = playerToPieces[currentPlayer][k];
     if(cp2->healthPoints <= 0) continue; // no abilities for dead pieces
-    auto legalAbilities = (*pieceTypeToSquareIndexToLegalAbilities)[cp2->type][cp2->squareIndex];
+    auto legalAbilities = gameCache->pieceTypeToSquareIndexToLegalAbilities[cp2->type][cp2->squareIndex];
     for(int l = 0; l < legalAbilities.size(); l++) {
       Piece* destinationSquarePiece = board[legalAbilities[l].abilityDstIdx];
       PlayerAction p = PlayerAction(MOVE_SKIP, MOVE_SKIP, legalAbilities[l].abilitySrcIdx, legalAbilities[l].abilityDstIdx);
@@ -1640,7 +1640,7 @@ bool Game::isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int 
     if(movePiece->healthPoints > 0) {
       movePieceIsAliveOrMoveSkip = true;
     }
-    auto legalMovesOnEmptyBoard = (*pieceTypeToSquareIndexToLegalMoves)[movePiece->type][movePiece->squareIndex];
+    auto legalMovesOnEmptyBoard = gameCache->pieceTypeToSquareIndexToLegalMoves[movePiece->type][movePiece->squareIndex];
     for(int i = 0; i < legalMovesOnEmptyBoard.size(); i++) {
       PlayerMove currentMove = legalMovesOnEmptyBoard[i];
       // Is p1 pawn trying to jump over another piece?
@@ -1679,7 +1679,7 @@ bool Game::isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int 
     if(abilityPiece->healthPoints > 0) {
       abilityPieceIsAliveOrAbilitySkip = true;
     }
-    auto legalAbilitiesOnEmptyBoard = (*pieceTypeToSquareIndexToLegalAbilities)[abilityPiece->type][abilityPiece->squareIndex];
+    auto legalAbilitiesOnEmptyBoard = gameCache->pieceTypeToSquareIndexToLegalAbilities[abilityPiece->type][abilityPiece->squareIndex];
     for(int i = 0; i < legalAbilitiesOnEmptyBoard.size(); i++) {
       PlayerAbility currentAbility = legalAbilitiesOnEmptyBoard[i];
       if(currentAbility.abilityDstIdx == abilityDstIdx) {
