@@ -781,7 +781,7 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           case P2_ASSASSIN:
             break;
           case NO_PIECE:
-            break;
+            continue;
           default:
             break;
         }
@@ -926,7 +926,7 @@ std::vector<PlayerAbility> Game::usefulLegalAbilitiesByPiece(int srcSquareIdx) {
           case P2_ASSASSIN:
             continue;
           case NO_PIECE:
-            break;
+            continue;
           default:
             break;
         }
@@ -1137,7 +1137,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 case P2_ASSASSIN:
                   break;
                 case NO_PIECE:
-                  break;
+                  continue;
                 default:
                   break;
               }
@@ -1282,7 +1282,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
                 case P2_ASSASSIN:
                   continue;
                 case NO_PIECE:
-                  break;
+                  continue;
                 default:
                   break;
               }
@@ -1451,7 +1451,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             case P2_ASSASSIN:
               break;
             case NO_PIECE:
-              break;
+              continue;
             default:
               break;
           }
@@ -1596,7 +1596,7 @@ std::vector<PlayerAction> Game::usefulLegalActions() {
             case P2_ASSASSIN:
               continue;
             case NO_PIECE:
-              break;
+              continue;
             default:
               break;
           }
