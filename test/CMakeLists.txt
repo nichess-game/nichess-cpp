@@ -4,7 +4,7 @@ set (cpptests
       legalactions undoactions other
     )
 set (legalactions_parts 1 2 3)
-set (undoactions_parts 1)
+set (undoactions_parts 1 2)
 set (other_parts 1 2)
 
 foreach(cpptest ${cpptests})

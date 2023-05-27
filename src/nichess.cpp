@@ -551,7 +551,6 @@ UndoInfo Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int
         undoInfo.abilityType = AbilityType::ASSASSIN_DAMAGE;
         undoInfo.affectedPieces[0] = abilityDstPiece;
         if(abilityDstPiece->healthPoints <= 0) {
-          undoInfo.abilityType = AbilityType::NO_ABILITY;
           board[abilityDstIdx] = new Piece(PieceType::NO_PIECE, 0, abilityDstIdx);
         }
         break;
