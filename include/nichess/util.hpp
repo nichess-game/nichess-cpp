@@ -1,5 +1,7 @@
 #include "nichess.hpp"
 
+#include <string>
+
 using namespace nichess;
 
 std::string playerToString(Player p);
