@@ -26,7 +26,7 @@ const int WARRIOR_ABILITY_POINTS = 100;
 const int ASSASSIN_ABILITY_POINTS = 120;
 
 const int NUM_PLAYERS = 2;
-const int NUM_PIECE_TYPE = 13;
+const int NUM_PIECE_TYPE = 11;
 
 // piece index is not the same thing as board(square) index
 // it is used as an array index for faster access to a specific piece
