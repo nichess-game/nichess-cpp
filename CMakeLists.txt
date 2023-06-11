@@ -5,7 +5,7 @@ project(
 )
 set(CMAKE_CXX_STANDARD 17)
 add_library(
-  nichess
+  nichess SHARED
   src/nichess.cpp
   src/util.cpp
   include/nichess/nichess.hpp
