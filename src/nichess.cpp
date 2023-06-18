@@ -623,25 +623,28 @@ void Game::undoAction(UndoInfo undoInfo) {
   this->currentPlayer = ~currentPlayer;
 }
 
-void Game::print() {
-  std::cout << "------------------------------------------\n";
+std::string Game::dump() const {
+  std::string retval = "";
+  retval += std::string("------------------------------------------\n");
   for(int i = NUM_ROWS-1; i >= 0; i--) {
-    std::cout << i << "   ";
+    retval += std::to_string(i) + std::string("   ");
     for(int j = 0; j < NUM_COLUMNS; j++) {
       if(board[coordinatesToBoardIndex(j, i)]->type != PieceType::NO_PIECE) {
-        std::cout << pieceTypeToString(board[coordinatesToBoardIndex(j, i)]->type) << board[coordinatesToBoardIndex(j, i)]->healthPoints << " ";
+        retval += pieceTypeToString(board[coordinatesToBoardIndex(j, i)]->type) + std::to_string(board[coordinatesToBoardIndex(j, i)]->healthPoints) + std::string(" ");
       } else {
-        std::cout << pieceTypeToString(board[coordinatesToBoardIndex(j, i)]->type) << "   " << " ";
+        retval += pieceTypeToString(board[coordinatesToBoardIndex(j, i)]->type) + std::string("   ") + std::string(" ");
       }
     }
-    std::cout << "\n";
+    retval += std::string("\n");
   } 
-  std::cout << "\n";
-  std::cout << "   ";
+  retval += std::string("\n");
+  retval += std::string("   ");
   for(int i = 0; i < NUM_COLUMNS; i++) {
-    std::cout << " " << i << "   ";
+    retval += std::string(" ") + std::to_string(i) + std::string("   ");
   }
-  std::cout << "\n------------------------------------------\n";
+  retval += std::string("\n------------------------------------------\n");
+
+  return retval;
 }
 
 void Game::makeMove(int moveSrcIdx, int moveDstIdx) {

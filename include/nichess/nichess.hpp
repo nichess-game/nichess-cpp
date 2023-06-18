@@ -155,7 +155,7 @@ class Game {
     void boardFromString(std::string encodedBoard);
     bool gameOver();
     std::optional<Player> winner();
-    void print();
+    std::string dump() const;
     void reset();
 };
 
