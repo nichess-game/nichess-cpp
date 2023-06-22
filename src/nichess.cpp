@@ -374,6 +374,11 @@ Game::Game(const Game& other) {
   playerToPieces[Player::PLAYER_2] = p2Pieces;
 }
 
+Game::Game(GameCache& gameCache, const std::string encodedBoard) {
+  this->gameCache = &gameCache;
+  boardFromString(encodedBoard);
+}
+
 Game::~Game() {
   for(Piece* p: playerToPieces[PLAYER_1]) {
     if(p->healthPoints <= 0) delete p;

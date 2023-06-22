@@ -112,14 +112,6 @@ class GameCache {
     std::vector<std::vector<int>> squareToNeighboringSquares;
     
     GameCache(); 
-    
-    /*
-    {
-      pieceTypeToSquareIndexToLegalMoves = generateLegalMovesOnAnEmptyBoard();
-      pieceTypeToSquareIndexToLegalAbilities = generateLegalAbilitiesOnAnEmptyBoard();
-      squareToNeighboringSquares = generateSquareToNeighboringSquares();
-    }
-    */
 };
 
 class Game {
@@ -136,6 +128,7 @@ class Game {
 
     Game(GameCache &gameCache);
     Game(const Game& other);
+    Game(GameCache &gameCache, const std::string encodedBoard);
     ~Game();
     void makeMove(int moveSrcIdx, int moveDstIdx);
     void undoMove(int moveSrcIdx, int moveDstIdx);
