@@ -404,10 +404,7 @@ UndoInfo Game::makeAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int
   undoInfo.moveSrcIdx = moveSrcIdx;
   undoInfo.moveDstIdx = moveDstIdx;
   if(moveSrcIdx != MOVE_SKIP) {
-    delete board[moveDstIdx];
-    board[moveDstIdx] = board[moveSrcIdx];
-    board[moveDstIdx]->squareIndex = moveDstIdx;
-    board[moveSrcIdx] = new Piece(PieceType::NO_PIECE, 0, moveSrcIdx);
+    makeMove(moveSrcIdx, moveDstIdx);
   }
   if(abilitySrcIdx != ABILITY_SKIP) {
     Piece* abilitySrcPiece = board[abilitySrcIdx];
