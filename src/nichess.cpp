@@ -2042,3 +2042,26 @@ void Game::boardFromString(std::string encodedBoard) {
 std::vector<Piece*> Game::getAllPiecesByPlayer(Player player) {
   return playerToPieces[player];
 }
+
+/* 
+ * performance test - https://www.chessprogramming.org/Perft
+ * with bulk counting
+ */
+unsigned long long nichess::perft(Game& game, int depth) {
+  unsigned long long nodes = 0;
+  std::vector<PlayerAction> legalActions = game.usefulLegalActions();
+  int numLegalActions = legalActions.size();
+  if(depth == 1) {
+    return (unsigned long long) numLegalActions;
+  }
+
+  UndoInfo ui;
+  PlayerAction pa;
+  for(int i = 0; i < numLegalActions; i++) {
+    PlayerAction pa = legalActions[i];
+    ui = game.makeAction(pa.moveSrcIdx, pa.moveDstIdx, pa.abilitySrcIdx, pa.abilityDstIdx);
+    nodes += perft(game, depth-1);
+    game.undoAction(ui);
+  }
+  return nodes;
+}
