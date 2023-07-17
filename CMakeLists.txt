@@ -10,6 +10,7 @@ add_library(
   src/util.cpp
   include/nichess/nichess.hpp
   include/nichess/util.hpp
+  include/nichess/constants.hpp
   )
 target_include_directories(nichess PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_include_directories(nichess PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
