@@ -84,7 +84,7 @@ class Game {
   private:
     Game();
   public:
-    Piece* board[NUM_ROWS * NUM_COLUMNS];
+    Piece* board[NUM_SQUARES];
     Piece* p1King;
     Piece* p2King;
     std::vector<std::vector<Piece*>> playerToPieces{NUM_PLAYERS};

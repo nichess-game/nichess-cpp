@@ -45,6 +45,18 @@ int legalActionsTest3() {
   }
 }
 
+int legalActionsTest4() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+  std::vector<PlayerAction> allLegalActions = g.allLegalActions();
+
+  if(allLegalActions.size() == 1886) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
 
 int legalactionstest(int argc, char* argv[]) {
   int defaultchoice = 1;
@@ -64,6 +76,8 @@ int legalactionstest(int argc, char* argv[]) {
     return legalActionsTest2();
   case 3:
     return legalActionsTest3();
+  case 4:
+    return legalActionsTest4();
   }
 
   return -1;

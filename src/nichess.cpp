@@ -1655,6 +1655,7 @@ std::vector<PlayerAction> Game::allLegalActions() {
         for(int l = 0; l < legalAbilities.size(); l++) {
           PlayerAbility currentAbility = legalAbilities[l];
           Piece* destinationSquarePiece = board[currentAbility.abilityDstIdx];
+          if(pieceBelongsToPlayer(destinationSquarePiece->type, this->currentPlayer)) continue;
 
           PlayerAction p = PlayerAction(currentMove.moveSrcIdx, currentMove.moveDstIdx, currentAbility.abilitySrcIdx, currentAbility.abilityDstIdx);
           retval.push_back(p);
@@ -1674,6 +1675,7 @@ std::vector<PlayerAction> Game::allLegalActions() {
     auto legalAbilities = gameCache->pieceTypeToSquareIndexToLegalAbilities[cp2->type][cp2->squareIndex];
     for(int l = 0; l < legalAbilities.size(); l++) {
       Piece* destinationSquarePiece = board[legalAbilities[l].abilityDstIdx];
+      if(pieceBelongsToPlayer(destinationSquarePiece->type, this->currentPlayer)) continue;
       PlayerAction p = PlayerAction(MOVE_SKIP, MOVE_SKIP, legalAbilities[l].abilitySrcIdx, legalAbilities[l].abilityDstIdx);
       retval.push_back(p);
     }

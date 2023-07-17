@@ -3,7 +3,7 @@ set(TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 set (cpptests
       legalactions undoactions other
     )
-set (legalactions_parts 1 2 3)
+set (legalactions_parts 1 2 3 4)
 set (undoactions_parts 1 2)
 set (other_parts 1 2)
 
