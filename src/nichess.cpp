@@ -195,7 +195,7 @@ Game::Game(const Game& other) {
   this->moveNumber = other.moveNumber;
   this->currentPlayer = other.currentPlayer;
   this->gameCache = other.gameCache;
-  for(int i = 0; i < NUM_ROWS * NUM_COLUMNS; i++) {
+  for(int i = 0; i < NUM_SQUARES; i++) {
     board[i] = new Piece(*other.board[i]);
   }
 
@@ -323,7 +323,7 @@ Game::~Game() {
     if(p->healthPoints <= 0) delete p;
   }
 
-  for(int i = 0; i < NUM_ROWS * NUM_COLUMNS; i++) {
+  for(int i = 0; i < NUM_SQUARES; i++) {
     delete board[i];
   }
 }
@@ -1833,7 +1833,7 @@ std::string Game::boardToString() {
   std::stringstream retval;
   retval << currentPlayer << "|";
   Piece* currentPiece;
-  for(int i = 0; i < NUM_ROWS*NUM_COLUMNS; i++) {
+  for(int i = 0; i < NUM_SQUARES; i++) {
     currentPiece = board[i];
     if(currentPiece->type == NO_PIECE) {
       retval << "empty,";

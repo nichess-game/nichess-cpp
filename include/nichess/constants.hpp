@@ -2,6 +2,7 @@ namespace nichess {
 
 const int NUM_ROWS = 8;
 const int NUM_COLUMNS = 8;
+const int NUM_SQUARES = NUM_ROWS * NUM_COLUMNS;
 const int NUM_STARTING_PIECES = 7;
 const int ABILITY_SKIP = -1;
 const int MOVE_SKIP = -1;

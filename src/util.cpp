@@ -146,7 +146,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   std::vector<std::vector<std::vector<PlayerMove>>> pieceTypeToSquareToLegalMoves{NUM_PIECE_TYPE};
 
   // p1 king moves
-  std::vector<std::vector<PlayerMove>> squareToP1KingMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP1KingMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -167,7 +167,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P1_KING] = squareToP1KingMoves;
 
   // p1 mage moves
-  std::vector<std::vector<PlayerMove>> squareToP1MageMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP1MageMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -188,7 +188,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P1_MAGE] = squareToP1MageMoves;
 
   // p1 pawn moves
-  std::vector<std::vector<PlayerMove>> squareToP1PawnMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP1PawnMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -216,7 +216,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P1_PAWN] = squareToP1PawnMoves;
 
   // p1 warrior moves
-  std::vector<std::vector<PlayerMove>> squareToP1WarriorMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP1WarriorMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -237,7 +237,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P1_WARRIOR] = squareToP1WarriorMoves;
 
   // p1 assassin moves
-  std::vector<std::vector<PlayerMove>> squareToP1AssassinMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP1AssassinMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -284,7 +284,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P1_ASSASSIN] = squareToP1AssassinMoves;
 
   // p2 king moves
-  std::vector<std::vector<PlayerMove>> squareToP2KingMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP2KingMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -305,7 +305,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P2_KING] = squareToP2KingMoves;
 
   // p2 mage moves
-  std::vector<std::vector<PlayerMove>> squareToP2MageMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP2MageMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -326,7 +326,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P2_MAGE] = squareToP2MageMoves;
 
   // p2 pawn moves
-  std::vector<std::vector<PlayerMove>> squareToP2PawnMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP2PawnMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -354,7 +354,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P2_PAWN] = squareToP2PawnMoves;
 
   // p2 warrior moves
-  std::vector<std::vector<PlayerMove>> squareToP2WarriorMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP2WarriorMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -375,7 +375,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P2_WARRIOR] = squareToP2WarriorMoves;
 
   // p2 assassin moves
-  std::vector<std::vector<PlayerMove>> squareToP2AssassinMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToP2AssassinMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -422,7 +422,7 @@ std::vector<std::vector<std::vector<PlayerMove>>> generateLegalMovesOnAnEmptyBoa
   pieceTypeToSquareToLegalMoves[P2_ASSASSIN] = squareToP2AssassinMoves;
 
   // NO_PIECE moves (shouldn't be used, added for completeness)
-  std::vector<std::vector<PlayerMove>> squareToNoPieceMoves{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerMove>> squareToNoPieceMoves{NUM_SQUARES};
   for(int move_row = 0; move_row < NUM_ROWS; move_row++) {
     for(int move_column = 0; move_column < NUM_COLUMNS; move_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(move_column, move_row);
@@ -443,7 +443,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   std::vector<std::vector<std::vector<PlayerAbility>>> pieceTypeToSquareToLegalAbilities{NUM_PIECE_TYPE};
 
   // p1 king abilities
-  std::vector<std::vector<PlayerAbility>> squareToP1KingAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP1KingAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -464,7 +464,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P1_KING] = squareToP1KingAbilities;
 
   // p1 mage abilities
-  std::vector<std::vector<PlayerAbility>> squareToP1MageAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP1MageAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -485,7 +485,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P1_MAGE] = squareToP1MageAbilities;
 
   // p1 pawn abilities
-  std::vector<std::vector<PlayerAbility>> squareToP1PawnAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP1PawnAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -506,7 +506,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P1_PAWN] = squareToP1PawnAbilities;
 
   // p1 warrior abilities
-  std::vector<std::vector<PlayerAbility>> squareToP1WarriorAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP1WarriorAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -527,7 +527,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P1_WARRIOR] = squareToP1WarriorAbilities;
 
   // p1 assassin abilities
-  std::vector<std::vector<PlayerAbility>> squareToP1AssassinAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP1AssassinAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -548,7 +548,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P1_ASSASSIN] = squareToP1AssassinAbilities;
 
   // p2 king abilities
-  std::vector<std::vector<PlayerAbility>> squareToP2KingAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP2KingAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -569,7 +569,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P2_KING] = squareToP2KingAbilities;
 
   // p2 mage abilities
-  std::vector<std::vector<PlayerAbility>> squareToP2MageAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP2MageAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -590,7 +590,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P2_MAGE] = squareToP2MageAbilities;
 
   // p2 pawn abilities
-  std::vector<std::vector<PlayerAbility>> squareToP2PawnAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP2PawnAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -611,7 +611,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P2_PAWN] = squareToP2PawnAbilities;
 
   // p2 warrior abilities
-  std::vector<std::vector<PlayerAbility>> squareToP2WarriorAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP2WarriorAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -632,7 +632,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P2_WARRIOR] = squareToP2WarriorAbilities;
 
   // p2 assassin abilities
-  std::vector<std::vector<PlayerAbility>> squareToP2AssassinAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToP2AssassinAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -653,7 +653,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
   pieceTypeToSquareToLegalAbilities[P2_ASSASSIN] = squareToP2AssassinAbilities;
 
   // NO_PIECE abilities
-  std::vector<std::vector<PlayerAbility>> squareToNoPieceAbilities{NUM_ROWS*NUM_COLUMNS};
+  std::vector<std::vector<PlayerAbility>> squareToNoPieceAbilities{NUM_SQUARES};
   for(int ability_row = 0; ability_row < NUM_ROWS; ability_row++) {
     for(int ability_column = 0; ability_column < NUM_COLUMNS; ability_column++) {
       int srcSquareIndex = coordinatesToBoardIndex(ability_column, ability_row);
@@ -671,7 +671,7 @@ std::vector<std::vector<std::vector<PlayerAbility>>> generateLegalAbilitiesOnAnE
  * Used for mage ability.
  */
 std::vector<std::vector<int>> generateSquareToNeighboringSquares() {
-  std::vector<std::vector<int>> squareToNeighboringSquares{NUM_ROWS * NUM_COLUMNS};
+  std::vector<std::vector<int>> squareToNeighboringSquares{NUM_SQUARES};
   for(int srcY = 0; srcY < NUM_ROWS; srcY++) {
     for(int srcX = 0; srcX < NUM_COLUMNS; srcX++) {
       std::vector<int> neighboringSquares;
