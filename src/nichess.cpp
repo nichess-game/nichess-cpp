@@ -31,42 +31,6 @@ PlayerAction::PlayerAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, in
   this->abilitySrcIdx = abilitySrcIdx;
   this->abilityDstIdx = abilityDstIdx;
 }
-void PlayerAction::print() {
-  std::tuple<int,int> srcXY = boardIndexToCoordinates(moveSrcIdx);
-  std::tuple<int,int> dstXY = boardIndexToCoordinates(moveDstIdx);
-  int mSrcX, mSrcY, mDstX, mDstY;
-  // converting board index to coordinates doesn't work for MOVE_SKIP
-  if(moveSrcIdx == MOVE_SKIP) { 
-    mSrcX = MOVE_SKIP;
-    mSrcY = MOVE_SKIP;
-    mDstX = MOVE_SKIP;
-    mDstY = MOVE_SKIP;
-  } else {
-    mSrcX = std::get<0>(srcXY);
-    mSrcY = std::get<1>(srcXY);
-    mDstX = std::get<0>(dstXY);
-    mDstY = std::get<1>(dstXY);
-  }
-  srcXY = boardIndexToCoordinates(abilitySrcIdx);
-  dstXY = boardIndexToCoordinates(abilityDstIdx);
-
-  int aSrcX, aSrcY, aDstX, aDstY;
-  // converting board index to coordinates doesn't work for ABILITY_SKIP
-  if(abilitySrcIdx == ABILITY_SKIP) { 
-    aSrcX = ABILITY_SKIP;
-    aSrcY = ABILITY_SKIP;
-    aDstX = ABILITY_SKIP;
-    aDstY = ABILITY_SKIP;
-  } else {
-    aSrcX = std::get<0>(srcXY);
-    aSrcY = std::get<1>(srcXY);
-    aDstX = std::get<0>(dstXY);
-    aDstY = std::get<1>(dstXY);
-  }
-
-  std::cout << "moveSrcX: " << mSrcX << " moveSrcY " << mSrcY << " moveDstX " << mDstX << " moveDstY " << mDstY;
-  std::cout << " abilitySrcX: " << aSrcX << " abilitySrcY " << aSrcY << " abilityDstX " << aDstX << " abilityDstY " << aDstY << "\n";
-}
 
 PlayerMove::PlayerMove() { }
 
@@ -75,31 +39,11 @@ PlayerMove::PlayerMove(int moveSrcIdx, int moveDstIdx) {
   this->moveDstIdx = moveDstIdx;
 }
 
-void PlayerMove::print() {
-  std::tuple<int,int> srcXY = boardIndexToCoordinates(moveSrcIdx);
-  std::tuple<int,int> dstXY = boardIndexToCoordinates(moveDstIdx);
-  int srcX = std::get<0>(srcXY);
-  int srcY = std::get<1>(srcXY);
-  int dstX = std::get<0>(dstXY);
-  int dstY = std::get<1>(dstXY);
-  std::cout << "moveSrcX: " << srcX << " moveSrcY " << srcY << " moveDstX " << dstX << " moveDstY " << dstY << "\n";
-}
-
 PlayerAbility::PlayerAbility() { }
 
 PlayerAbility::PlayerAbility(int abilitySrcIdx, int abilityDstIdx) {
   this->abilitySrcIdx = abilitySrcIdx;
   this->abilityDstIdx = abilityDstIdx;
-}
-
-void PlayerAbility::print() {
-  std::tuple<int,int> srcXY = boardIndexToCoordinates(abilitySrcIdx);
-  std::tuple<int,int> dstXY = boardIndexToCoordinates(abilityDstIdx);
-  int srcX = std::get<0>(srcXY);
-  int srcY = std::get<1>(srcXY);
-  int dstX = std::get<0>(dstXY);
-  int dstY = std::get<1>(dstXY);
-  std::cout << "abilitySrcX: " << srcX << " abilitySrcY " << srcY << " abilityDstX " << dstX << " abilityDstY " << dstY << "\n";
 }
 
 Piece::Piece(): type(PieceType::NO_PIECE), healthPoints(0), squareIndex(0) { }
@@ -126,13 +70,6 @@ bool Piece::operator!=(const Piece& other) const {
     return true;
   }
   return (other_cs->type != type || other_cs->healthPoints != healthPoints || other_cs->squareIndex != squareIndex);
-}
-
-    
-void Piece::print() {
-  std::stringstream ss;
-  ss << "I am piece " << type << " at idx " << squareIndex << " and I have " << healthPoints << " health points.\n";
-  std::cout << ss.str();
 }
 
 UndoInfo::UndoInfo() {
@@ -248,7 +185,6 @@ void Game::reset() {
   p2Pieces[PAWN_3_PIECE_INDEX] = board[coordinatesToBoardIndex(2,6)];
   playerToPieces[Player::PLAYER_2] = p2Pieces;
 }
-
 
 Game::Game(GameCache& gameCache) {
   this->gameCache = &gameCache;
