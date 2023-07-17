@@ -36,7 +36,6 @@ class Piece {
     Piece(const Piece& other);
     bool operator==(const Piece& other) const;
     bool operator!=(const Piece& other) const;
-    void print();
 };
 
 class PlayerMove {
@@ -44,7 +43,6 @@ class PlayerMove {
     int moveSrcIdx, moveDstIdx;
     PlayerMove();
     PlayerMove(int moveSrcIdx, int moveDstIdx);
-    void print();
 };
 
 class PlayerAbility {
@@ -52,7 +50,6 @@ class PlayerAbility {
     int abilitySrcIdx, abilityDstIdx;
     PlayerAbility();
     PlayerAbility(int abilitySrcIdx, int abilityDstIdx);
-    void print();
 };
 
 class PlayerAction {
@@ -60,7 +57,6 @@ class PlayerAction {
     int moveSrcIdx, moveDstIdx, abilitySrcIdx, abilityDstIdx;
     PlayerAction();
     PlayerAction(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int abilityDstIdx);
-    void print();
 };
 
 class UndoInfo {
