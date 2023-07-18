@@ -57,6 +57,134 @@ int legalActionsTest4() {
   }
 }
 
+int legalActionsTest5() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(0, 1, ABILITY_SKIP, ABILITY_SKIP)) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+int legalActionsTest6() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(MOVE_SKIP, MOVE_SKIP, ABILITY_SKIP, ABILITY_SKIP)) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+/*
+ * Move to the same square piece is already at
+ */
+int legalActionsTest7() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(0, 0, ABILITY_SKIP, ABILITY_SKIP)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/*
+ * Only set moveSrcIdx to MOVE_SKIP (should be moveDstIdx too in order to skip the move)
+ */
+int legalActionsTest8() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(MOVE_SKIP, 0, ABILITY_SKIP, ABILITY_SKIP)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/*
+ * Move outside the board
+ */
+int legalActionsTest9() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+  g.makeAction(MOVE_SKIP, MOVE_SKIP, ABILITY_SKIP, ABILITY_SKIP);
+
+  if(g.isActionLegal(63, 64, ABILITY_SKIP, ABILITY_SKIP)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/*
+ * Move to an already occupied square
+ */
+int legalActionsTest10() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(0, 8, ABILITY_SKIP, ABILITY_SKIP)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/*
+ * Use ability on an empty square
+ */
+int legalActionsTest11() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(MOVE_SKIP, MOVE_SKIP, 0, 1)) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+/*
+ * Use ability on a square occupied by your own piece
+ */
+int legalActionsTest12() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(MOVE_SKIP, MOVE_SKIP, 0, 8)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+int legalActionsTest13() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(0, 2, ABILITY_SKIP, ABILITY_SKIP)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+int legalActionsTest14() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+
+  if(g.isActionLegal(MOVE_SKIP, MOVE_SKIP, 0, 2)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
 
 int legalactionstest(int argc, char* argv[]) {
   int defaultchoice = 1;
@@ -78,6 +206,27 @@ int legalactionstest(int argc, char* argv[]) {
     return legalActionsTest3();
   case 4:
     return legalActionsTest4();
+  case 5:
+    return legalActionsTest5();
+  case 6:
+    return legalActionsTest6();
+  case 7:
+    return legalActionsTest7();
+  case 8:
+    return legalActionsTest8();
+  case 9:
+    return legalActionsTest9();
+  case 10:
+    return legalActionsTest10();
+  case 11:
+    return legalActionsTest11();
+  case 12:
+    return legalActionsTest12();
+  case 13:
+    return legalActionsTest13();
+  case 14:
+    return legalActionsTest14();
+
   }
 
   return -1;

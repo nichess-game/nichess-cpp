@@ -1718,9 +1718,11 @@ bool Game::isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int 
   bool abilityPieceBelongsToCurrentPlayerOrAbilitySkip = false;
   bool movePieceIsAliveOrMoveSkip = false;
   bool abilityPieceIsAliveOrAbilitySkip = false;
+  bool abilityDstPieceBelongsToCurrentPlayer = false; // are you trying to attack your own piece?
   bool currentPlayersKingIsAlive = false;
   Piece* movePiece;
   Piece* abilityPiece;
+  Piece* abilityDstPiece;
 
   if(moveSrcIdx == MOVE_SKIP && moveDstIdx == MOVE_SKIP) {
     moveLegal = true;
@@ -1767,11 +1769,15 @@ bool Game::isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int 
     abilityPieceIsAliveOrAbilitySkip = true;
   } else {
     abilityPiece = board[abilitySrcIdx];
+    abilityDstPiece = board[abilityDstIdx];
     if(pieceBelongsToPlayer(abilityPiece->type, currentPlayer)) {
       abilityPieceBelongsToCurrentPlayerOrAbilitySkip = true;
     }
     if(abilityPiece->healthPoints > 0) {
       abilityPieceIsAliveOrAbilitySkip = true;
+    }
+    if(pieceBelongsToPlayer(abilityDstPiece->type, this->currentPlayer)) {
+      abilityDstPieceBelongsToCurrentPlayer = true;
     }
     auto legalAbilitiesOnEmptyBoard = gameCache->pieceTypeToSquareIndexToLegalAbilities[abilityPiece->type][abilityPiece->squareIndex];
     for(int i = 0; i < legalAbilitiesOnEmptyBoard.size(); i++) {
@@ -1791,7 +1797,8 @@ bool Game::isActionLegal(int moveSrcIdx, int moveDstIdx, int abilitySrcIdx, int 
   
   if(moveLegal && abilityLegal && movePieceBelongsToCurrentPlayerOrMoveSkip &&
       abilityPieceBelongsToCurrentPlayerOrAbilitySkip && movePieceIsAliveOrMoveSkip &&
-      abilityPieceIsAliveOrAbilitySkip && currentPlayersKingIsAlive) {
+      abilityPieceIsAliveOrAbilitySkip && currentPlayersKingIsAlive &&
+      !(abilityDstPieceBelongsToCurrentPlayer)) {
     return true;
   } else {
     return false;
