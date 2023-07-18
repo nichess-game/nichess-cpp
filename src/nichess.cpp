@@ -949,7 +949,13 @@ std::vector<PlayerAbility> Game::allLegalAbilitiesByPiece(int srcSquareIdx) {
       piece->healthPoints <= 0) {
     return retval;
   }
-  retval = gameCache->pieceTypeToSquareIndexToLegalAbilities[piece->type][piece->squareIndex];
+  auto legalAbilitiesOnAnEmptyBoard = gameCache->pieceTypeToSquareIndexToLegalAbilities[piece->type][piece->squareIndex];
+
+  for(PlayerAbility pa: legalAbilitiesOnAnEmptyBoard) {
+    Piece* abilityDstPiece = board[pa.abilityDstIdx];
+    if(pieceBelongsToPlayer(abilityDstPiece->type, currentPlayer)) continue;
+    retval.push_back(pa);
+  }
   return retval;
 }
 

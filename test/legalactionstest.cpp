@@ -186,6 +186,56 @@ int legalActionsTest14() {
   }
 }
 
+int legalActionsTest15() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+  auto a = g.allLegalAbilitiesByPiece(0);
+
+  if(a.size() == 1) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+int legalActionsTest16() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+  auto a = g.allLegalAbilitiesByPiece(12);
+
+  if(a.size() == 17) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+int legalActionsTest17() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+  auto a = g.usefulLegalAbilitiesByPiece(0);
+
+  if(a.size() == 0) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+int legalActionsTest18() {
+  GameCache cache = GameCache();
+  Game g = Game(cache);
+  auto a = g.usefulLegalAbilitiesByPiece(12);
+
+  if(a.size() == 0) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+
+
 int legalactionstest(int argc, char* argv[]) {
   int defaultchoice = 1;
   int choice = defaultchoice;
@@ -226,7 +276,17 @@ int legalactionstest(int argc, char* argv[]) {
     return legalActionsTest13();
   case 14:
     return legalActionsTest14();
-
+  case 15:
+    return legalActionsTest15();
+  case 16:
+    return legalActionsTest16();
+  case 17:
+    return legalActionsTest17();
+  case 18:
+    return legalActionsTest18();
+  default:
+    printf("\nInvalid test number.\n");
+    return -1;
   }
 
   return -1;

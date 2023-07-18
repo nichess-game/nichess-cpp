@@ -53,6 +53,9 @@ int othertest(int argc, char* argv[]) {
     return copyTest1();
   case 2:
     return copyTest2();
+  default:
+    printf("\nInvalid test number.\n");
+    return -1;
   }
 
   return -1;

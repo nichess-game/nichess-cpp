@@ -57,6 +57,9 @@ int undoactionstest(int argc, char* argv[]) {
     return undoActionTest1();
   case 2:
     return undoActionTest2();
+  default:
+    printf("\nInvalid test number.\n");
+    return -1;
   }
 
 
