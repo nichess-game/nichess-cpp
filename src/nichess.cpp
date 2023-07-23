@@ -174,6 +174,7 @@ void Game::reset() {
   p1Pieces[MAGE_PIECE_INDEX] = board[coordinatesToBoardIndex(4,1)];
   p1Pieces[PAWN_3_PIECE_INDEX] = board[coordinatesToBoardIndex(5,1)];
   playerToPieces[Player::PLAYER_1] = p1Pieces;
+  p1King = p1Pieces[KING_PIECE_INDEX];
 
   std::vector<Piece*> p2Pieces{NUM_STARTING_PIECES};
   p2Pieces[KING_PIECE_INDEX] = board[coordinatesToBoardIndex(7,7)];
@@ -184,6 +185,7 @@ void Game::reset() {
   p2Pieces[MAGE_PIECE_INDEX] = board[coordinatesToBoardIndex(3,6)];
   p2Pieces[PAWN_3_PIECE_INDEX] = board[coordinatesToBoardIndex(2,6)];
   playerToPieces[Player::PLAYER_2] = p2Pieces;
+  p2King = p2Pieces[KING_PIECE_INDEX];
 }
 
 Game::Game(GameCache& gameCache) {
@@ -1905,6 +1907,8 @@ void Game::boardFromString(std::string encodedBoard) {
   p1Pieces[MAGE_PIECE_INDEX] = new Piece(PieceType::P1_MAGE, 0, 0);
   p1Pieces[WARRIOR_PIECE_INDEX] = new Piece(PieceType::P1_WARRIOR, 0, 0);
 
+  p1King = p1Pieces[KING_PIECE_INDEX];
+
   std::vector<Piece*> p2Pieces(NUM_STARTING_PIECES);
   p2Pieces[KING_PIECE_INDEX] = new Piece(PieceType::P2_KING, 0, 0);
   p2Pieces[PAWN_1_PIECE_INDEX] = new Piece(PieceType::P2_PAWN, 0, 0);
@@ -1914,6 +1918,7 @@ void Game::boardFromString(std::string encodedBoard) {
   p2Pieces[MAGE_PIECE_INDEX] = new Piece(PieceType::P2_MAGE, 0, 0);
   p2Pieces[WARRIOR_PIECE_INDEX] = new Piece(PieceType::P2_WARRIOR, 0, 0);
 
+  p2King = p2Pieces[KING_PIECE_INDEX];
 
   std::string b1 = encodedBoard.substr(2);
   std::string delimiter1 = ",";
@@ -1937,6 +1942,7 @@ void Game::boardFromString(std::string encodedBoard) {
       if(s == "0king") {
         board[boardIdx] = new Piece(PieceType::P1_KING, healthPoints, boardIdx);
         p1Pieces[KING_PIECE_INDEX] = board[boardIdx];
+        p1King = board[boardIdx];
       } else if(s == "0pawn") {
         board[boardIdx] = new Piece(PieceType::P1_PAWN, healthPoints, boardIdx);
         if(p1Pieces[PAWN_1_PIECE_INDEX]->healthPoints <= 0) {
@@ -1960,6 +1966,7 @@ void Game::boardFromString(std::string encodedBoard) {
       } else if(s == "1king") {
         board[boardIdx] = new Piece(PieceType::P2_KING, healthPoints, boardIdx);
         p2Pieces[KING_PIECE_INDEX] = board[boardIdx];
+        p2King = board[boardIdx];
       } else if(s == "1pawn") {
         board[boardIdx] = new Piece(PieceType::P2_PAWN, healthPoints, boardIdx);
         if(p2Pieces[PAWN_1_PIECE_INDEX]->healthPoints <= 0) {
